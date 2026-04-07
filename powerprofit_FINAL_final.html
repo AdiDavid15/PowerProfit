@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ PowerProfit</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07101e;--bg2:#0b1527;--bg3:#0f1c33;--card:#121e38;--card2:#162340;
+  --acc:#00c8ff;--green:#00e676;--gold:#ffd54f;--orange:#ff9800;--red:#ff5252;--purple:#b388ff;
+  --text:#e4eeff;--text2:#8fa8c8;--text3:#445870;
+  --b:rgba(0,200,255,0.09);--b2:rgba(0,200,255,0.22);--r:12px;--rlg:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 600px 400px at 10% 15%,rgba(0,200,255,0.05) 0%,transparent 70%),radial-gradient(ellipse 400px 600px at 90% 80%,rgba(0,80,180,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,200,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,0.02) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;min-height:100vh}
+
+/* ═══ NAV ═══ */
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--b);backdrop-filter:blur(16px);background:rgba(7,16,30,0.92);position:sticky;top:0;z-index:100}
+.nlogo{display:flex;align-items:center;gap:10px;cursor:default}
+.nli{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(0,200,255,0.15),rgba(0,200,255,0.32));border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:17px}
+.nlogo h1{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.nlogo p{font-size:10px;color:var(--text3)}
+.nlive{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.18);font-size:11px;color:var(--green)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ═══ MODAL ═══ */
+.overlay{position:fixed;inset:0;background:rgba(4,9,20,0.85);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.overlay.on{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border:1px solid var(--b2);border-radius:20px;padding:40px 44px;width:100%;max-width:380px;text-align:center;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.modal-icon{font-size:44px;margin-bottom:16px}
+.modal h2{font-size:21px;font-weight:900;letter-spacing:-.4px;margin-bottom:6px}
+.modal p{font-size:12px;color:var(--text3);margin-bottom:26px;line-height:1.6}
+.pin-row{display:flex;gap:10px;justify-content:center;margin-bottom:6px}
+.pin-box{width:56px;height:64px;border-radius:11px;background:var(--bg3);border:2px solid var(--b2);color:var(--text);font-size:26px;font-weight:900;text-align:center;outline:none;transition:border-color .15s;caret-color:transparent;font-family:'Heebo',sans-serif}
+.pin-box:focus{border-color:var(--acc);background:rgba(0,200,255,0.05)}
+.pin-box.filled{border-color:rgba(0,200,255,0.4)}
+.pin-err{color:var(--red);font-size:12px;min-height:18px;margin-bottom:12px;transition:opacity .2s}
+.pin-err.hide{opacity:0}
+.modal-footer{display:flex;gap:8px;margin-top:6px}
+
+/* ═══ HOME — site cards ═══ */
+.home{max-width:1160px;margin:0 auto;padding:32px 28px}
+.home-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+.home-hdr h2{font-size:24px;font-weight:900;letter-spacing:-.5px}
+.home-hdr p{font-size:12px;color:var(--text3);margin-top:4px}
+.sites-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.site-card{background:var(--card);border:1px solid var(--b);border-radius:var(--rlg);overflow:hidden;cursor:pointer;transition:all .2s}
+.site-card:hover{border-color:var(--b2);box-shadow:0 0 32px rgba(0,200,255,0.1);transform:translateY(-3px)}
+.sc-top{display:flex;align-items:center;gap:11px;padding:16px 18px 13px;border-bottom:1px solid var(--b)}
+.sc-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.sc-top h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.sc-top p{font-size:10px;color:var(--text3)}
+.sc-status{margin-right:auto;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.st-ok{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2)}
+.st-warn{background:rgba(255,152,0,0.1);color:var(--orange);border:1px solid rgba(255,152,0,0.2)}
+.sc-body{padding:14px 18px}
+.sc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sc-m{background:var(--bg3);border-radius:8px;padding:8px 10px}
+.sc-m .ml{font-size:9px;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.sc-m .mv{font-size:13px;font-weight:700}
+.sc-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;gap:1px}
+.sc-bar div{height:100%;border-radius:1px}
+.sc-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--b);font-size:11px;color:var(--text3)}
+
+/* CATEGORY TABS */
+.cat-tab{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:10px;font-family:'Heebo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--b);background:var(--card);color:var(--text3);transition:all .18s}
+.cat-tab:hover{border-color:var(--b2);color:var(--text2)}
+.cat-tab.active{background:rgba(0,200,255,0.1);color:var(--acc);border-color:var(--b2)}
+.cat-count{background:var(--bg3);border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700}
+.cat-tab.active .cat-count{background:rgba(0,200,255,0.15);color:var(--acc)}
+.admin-card{background:linear-gradient(135deg,rgba(255,213,79,0.06),rgba(255,152,0,0.04));border:1px solid rgba(255,213,79,0.2);border-radius:var(--rlg);padding:20px 22px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:16px;margin-top:24px}
+.admin-card:hover{border-color:rgba(255,213,79,0.4);box-shadow:0 0 28px rgba(255,213,79,0.08);transform:translateY(-1px)}
+.admin-card .aic{width:48px;height:48px;border-radius:11px;background:rgba(255,213,79,0.12);border:1px solid rgba(255,213,79,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.admin-card h3{font-size:15px;font-weight:800;color:var(--gold);margin-bottom:3px}
+.admin-card p{font-size:11px;color:var(--text3)}
+.admin-card .arr{margin-right:auto;font-size:18px;color:rgba(255,213,79,0.5)}
+
+/* ═══ SITE VIEW — manager ═══ */
+.sv{max-width:700px;margin:0 auto;padding:28px}
+.sv-hero{background:linear-gradient(135deg,var(--card),rgba(0,200,255,0.03));border:1px solid var(--b2);border-radius:20px;padding:28px;text-align:center;margin-bottom:22px}
+.sv-hero .h-av{font-size:50px;margin-bottom:14px}
+.sv-hero h2{font-size:25px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.sv-hero p{font-size:12px;color:var(--text3)}
+.sv-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.pill{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;background:var(--bg3);border:1px solid var(--b)}
+
+/* UPLOAD ZONE */
+.uz-wrap{margin-bottom:20px}
+.uz-wrap h3{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.uz-types{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.uzt{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:12px;text-align:center}
+.uzt .ui{font-size:20px;margin-bottom:5px}
+.uzt .ut{font-size:10.5px;font-weight:700;margin-bottom:2px}
+.uzt .us{font-size:9.5px;color:var(--text3)}
+.uz{border:2px dashed var(--b2);border-radius:var(--rlg);padding:30px 20px;text-align:center;cursor:pointer;background:rgba(0,200,255,0.015);position:relative;overflow:hidden;transition:all .2s}
+.uz:hover,.uz.drag{border-color:var(--acc);background:rgba(0,200,255,0.04)}
+.uz.proc{border-color:var(--gold);background:rgba(255,213,79,0.02)}
+.uz.done{border-color:var(--green);background:rgba(0,230,118,0.02)}
+.uz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz h3{font-size:14px;font-weight:700;margin:8px 0 4px;color:var(--text)}
+.uz p{font-size:11.5px;color:var(--text3)}
+.spin{width:40px;height:40px;border-radius:50%;border:3px solid rgba(255,213,79,0.15);border-top:3px solid var(--gold);animation:sp .8s linear infinite;margin:0 auto 8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* EXTRACTED */
+.exb{background:var(--card);border:1px solid rgba(0,230,118,0.2);border-radius:var(--r);padding:14px 18px;margin-top:12px}
+.exh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.exh h3{font-size:13px;font-weight:700;color:var(--green)}
+.exf{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ef{background:var(--bg3);border-radius:7px;padding:8px 10px}
+.efl{font-size:9px;color:var(--text3);margin-bottom:3px}
+.efv{font-size:12.5px;font-weight:700;color:var(--acc)}
+
+/* UPLOAD HISTORY */
+.hist{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.hi{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:9px 13px;border:1px solid var(--b);font-size:12px}
+.hi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* SUMMARY */
+.sum-block{background:linear-gradient(135deg,rgba(0,200,255,0.04),rgba(0,80,180,0.02));border:1px solid var(--b2);border-radius:var(--rlg);padding:24px;margin-top:20px}
+.sum-block h3{font-size:16px;font-weight:900;letter-spacing:-.3px;margin-bottom:18px}
+.sum-big{background:var(--bg3);border-radius:12px;padding:20px;text-align:center;border:1px solid var(--b2);margin-bottom:14px}
+.sum-big .sl{font-size:10px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.sum-big .sv2{font-size:34px;font-weight:900;color:var(--acc);letter-spacing:-1.5px}
+.sum-big .ss{font-size:11px;color:var(--text3);margin-top:4px}
+.sum4{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:14px}
+.sc2{background:var(--bg3);border-radius:10px;padding:14px;text-align:center}
+.sc2 .sl{font-size:9px;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.sc2 .sv{font-size:19px;font-weight:900}
+.sc2 .ss2{font-size:9px;color:var(--text3);margin-top:3px}
+table.mst{width:100%;border-collapse:collapse;font-size:11.5px}
+table.mst th{color:var(--text3);font-weight:500;padding:6px 8px;text-align:right;border-bottom:1px solid var(--b)}
+table.mst td{padding:6px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,0.02)}
+table.mst td.pos{color:var(--green);font-weight:700}
+table.mst td.neg{color:var(--red)}
+table.mst td.mn{font-weight:600;color:var(--text2)}
+table.mst tr.tot td{font-weight:700;border-top:1px solid var(--b);background:var(--bg2)}
+.sbar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px;margin-top:14px}
+.sbar div{height:100%;border-radius:1px}
+
+/* ═══ ADMIN VIEW ═══ */
+.av-wrap{max-width:1160px;margin:0 auto;padding:32px 28px}
+.av-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.av-hdr h2{font-size:22px;font-weight:900;letter-spacing:-.5px}
+.av-hdr p{font-size:12px;color:var(--text3);margin-top:3px}
+.krow{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--b);border-radius:var(--rlg);padding:18px;transition:all .18s}
+.kpi:hover{border-color:var(--b2);box-shadow:0 0 24px rgba(0,200,255,0.08)}
+.kl{font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.kv{font-size:24px;font-weight:900;letter-spacing:-1px;line-height:1}
+.ks{font-size:10px;color:var(--text3);margin-top:4px}
+.kpi.ca .kv{color:var(--acc)}.kpi.cg .kv{color:var(--green)}.kpi.co .kv{color:var(--orange)}.kpi.cgd .kv{color:var(--gold)}
+.alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.alrt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;background:rgba(255,82,82,0.06);border:1px solid rgba(255,82,82,0.18);font-size:12px}
+.alrt button{margin-right:auto;background:none;border:none;color:var(--acc);font-size:12px;font-weight:700;cursor:pointer;font-family:'Heebo',sans-serif}
+.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 17px;border-radius:9px;font-family:'Heebo',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;border:none;outline:none;transition:all .15s}
+.btn-acc{background:var(--acc);color:#060f1c;box-shadow:0 4px 16px rgba(0,200,255,0.2)}
+.btn-acc:hover{background:#33d6ff;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--b2)}
+.btn-ghost:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.btn-ghost-full{width:100%;justify-content:center}
+.btn-gold{background:rgba(255,213,79,0.12);color:var(--gold);border:1px solid rgba(255,213,79,0.25)}
+.btn-gold:hover{background:rgba(255,213,79,0.2)}
+.btn-red{background:rgba(255,82,82,0.1);color:var(--red);border:1px solid rgba(255,82,82,0.2)}
+.btn-sm{padding:5px 12px;font-size:11.5px}
+.btn-full{width:100%;justify-content:center;padding:12px}
+
+/* ADMIN SITE PANELS */
+.panels{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--card);border:1px solid var(--b);border-radius:var(--rlg);overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;cursor:pointer;transition:background .15s;user-select:none}
+.ph:hover{background:rgba(255,255,255,0.02)}
+.phl{display:flex;align-items:center;gap:10px}
+.pico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.phl h3{font-size:13.5px;font-weight:700}
+.phl p{font-size:10px;color:var(--text3);margin-top:1px}
+.phr{display:flex;align-items:center;gap:8px}
+.pbadge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.chev{font-size:11px;color:var(--text3);transition:transform .2s}
+.chev.open{transform:rotate(180deg)}
+.pb{padding:16px 20px;display:none;border-top:1px solid var(--b)}
+.pb.open{display:block}
+.note{font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.tw{overflow-x:auto;margin-top:10px}
+table.mt{width:100%;border-collapse:collapse;font-size:11px;min-width:700px}
+table.mt th{background:var(--bg3);color:var(--text3);padding:7px 9px;text-align:right;font-weight:500;border-bottom:1px solid var(--b);white-space:nowrap;font-size:10px}
+table.mt th.thb{background:rgba(0,100,200,0.14);color:#7ec8ff}
+table.mt th.thg{background:rgba(0,150,60,0.1);color:#6edc9a}
+table.mt td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,0.022);text-align:right;vertical-align:middle}
+table.mt tr:hover td{background:rgba(255,255,255,0.01)}
+table.mt td.mn{font-weight:600;color:var(--text2);white-space:nowrap}
+table.mt td.pos{color:var(--green);font-weight:700}
+table.mt td.neg{color:var(--red)}
+table.mt td.calc{background:rgba(0,180,60,0.07);color:#6edc9a}
+table.mt tr.tot td{background:var(--bg3);font-weight:700;border-top:1px solid var(--b)}
+.bi{display:block;width:100%;background:rgba(0,120,255,0.1)!important;border:1px solid rgba(0,150,255,0.32)!important;border-radius:5px;color:#bde4ff!important;font-family:'Heebo',sans-serif;font-size:11px;padding:4px 5px;text-align:right;outline:none;min-width:72px;transition:border-color .15s}
+.bi:focus{border-color:var(--acc)!important;box-shadow:0 0 0 2px rgba(0,200,255,0.08)!important}
+.bi::placeholder{color:rgba(100,180,255,0.3);font-size:10px}
+.stag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700}
+.s-s{background:rgba(255,152,0,0.12);color:var(--orange)}.s-w{background:rgba(100,181,246,0.12);color:#64b5f6}.s-m{background:rgba(0,230,118,0.1);color:var(--green)}
+.ctabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+.ctab{padding:5px 13px;border-radius:8px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--b);background:transparent;color:var(--text3);font-family:'Heebo',sans-serif;transition:all .15s}
+.ctab.active{background:rgba(0,200,255,0.1);color:var(--acc);border-color:var(--b2)}
+
+.toast{position:fixed;bottom:22px;right:22px;z-index:999;background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:8px;font-size:12.5px;box-shadow:0 8px 32px rgba(0,0,0,0.5);transform:translateY(80px);opacity:0;transition:all .25s}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:900px){.krow{grid-template-columns:repeat(2,1fr)}.sites-grid,.adm-grid{grid-template-columns:1fr}.uz-types{grid-template-columns:1fr 1fr}.sum4{grid-template-columns:1fr 1fr}.exf{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){nav{padding:10px 14px}.home,.sv,.av-wrap{padding:14px}.krow{grid-template-columns:1fr 1fr}.uz-types{grid-template-columns:1fr}.sum4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- NAV -->
+<nav>
+  <div class="nlogo"><img src="data:image/png;base64,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" style="height:36px;width:36px;border-radius:9px;object-fit:contain;background:white;padding:2px"><div><h1>PowerProfit</h1><p id="nav-sub">מערכת רווחי חשמל — ריט 1</p></div></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div id="nav-right"></div>
+    <div class="nlive"><span class="dot"></span>Live</div>
+  </div>
+</nav>
+
+<!-- ═══ MODAL: Login ═══ -->
+<div class="overlay" id="modal-login">
+  <div class="modal">
+    <div class="modal-icon" id="modal-icon">🔐</div>
+    <h2 id="modal-title">כניסה לנכס</h2>
+    <p id="modal-desc">הזן קוד גישה לנכס זה</p>
+    <div class="pin-row">
+      <input class="pin-box" type="password" maxlength="1" id="p0" oninput="pinInput(0)" onkeydown="pinKey(event,0)">
+      <input class="pin-box" type="password" maxlength="1" id="p1" oninput="pinInput(1)" onkeydown="pinKey(event,1)">
+      <input class="pin-box" type="password" maxlength="1" id="p2" oninput="pinInput(2)" onkeydown="pinKey(event,2)">
+      <input class="pin-box" type="password" maxlength="1" id="p3" oninput="pinInput(3)" onkeydown="pinKey(event,3)">
+    </div>
+    <div class="pin-err hide" id="pin-err">קוד שגוי, נסה שוב</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-full" onclick="closeModal()">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- API Key Modal -->
+<div class="overlay" id="modal-api">
+  <div class="modal">
+    <div class="modal-icon">🔑</div>
+    <h2>Anthropic API Key</h2>
+    <p>נדרש לחילוץ אוטומטי של חשבונות<br>המפתח נשמר מקומית על המכשיר שלך בלבד</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-..." 
+      style="width:100%;background:var(--bg3);border:1px solid var(--b2);border-radius:9px;color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;padding:11px 14px;outline:none;margin-bottom:14px;text-align:left;direction:ltr;transition:border-color .15s"
+      onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor=''">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeApiModal()">ביטול</button>
+      <button class="btn btn-acc" style="flex:1;justify-content:center" onclick="saveApiKey()">שמור</button>
+    </div>
+    <div id="api-status" style="margin-top:12px;font-size:11px;color:var(--text3);min-height:16px"></div>
+  </div>
+</div>
+<div id="scr-home">
+<div class="home">
+  <!-- LOGO HERO -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--b)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img src="data:image/png;base64,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" style="height:48px;width:auto;object-fit:contain;opacity:0.92;filter:brightness(1.1)">
+      <div>
+        <h2 style="font-size:20px;font-weight:900;letter-spacing:-.4px;margin-bottom:2px">PowerProfit</h2>
+        <p style="font-size:10px;color:var(--text3)" id="home-date"></p>
+      </div>
+    </div>
+    <p style="font-size:10px;color:var(--text3);text-align:left">© 2025 AVO הנדסת חשמל בע"מ<br>כל הזכויות שמורות</p>
+  </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <div style="display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap">
+    <button class="cat-tab active" onclick="switchCat('commercial')" id="cat-commercial">🏪 מסחרי <span class="cat-count" id="cc-commercial">12</span></button>
+    <button class="cat-tab" onclick="switchCat('logistics')" id="cat-logistics">🏭 לוגיסטי <span class="cat-count" id="cc-logistics">0</span></button>
+    <button class="cat-tab" onclick="switchCat('offices')" id="cat-offices">🏢 משרדים <span class="cat-count" id="cc-offices">0</span></button>
+    <button class="cat-tab" onclick="switchCat('parking')" id="cat-parking">🅿️ חניונים <span class="cat-count" id="cc-parking">0</span></button>
+  </div>
+
+  <div class="sites-grid" id="sites-grid"></div>
+
+  <!-- Empty state -->
+  <div id="cat-empty" style="display:none;text-align:center;padding:60px 20px;color:var(--text3)">
+    <div style="font-size:48px;margin-bottom:16px">📭</div>
+    <p style="font-size:15px;font-weight:600;margin-bottom:8px">אין נכסים בקטגוריה זו</p>
+    <p style="font-size:12px">נכסים יתווספו כאשר תספק רשימה</p>
+  </div>
+
+  <!-- ADMIN ENTRY -->
+  <div class="admin-card" onclick="openLogin('admin')">
+    <div class="aic">👑</div>
+    <div><h3>דשבורד ניהול</h3><p>גישה מלאה לכל הנכסים · מנהל מערכת</p></div>
+    <div class="arr">←</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SCREEN: Site Manager ═══ -->
+<div id="scr-site" style="display:none">
+<div class="sv">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+    <button class="btn btn-ghost btn-sm" onclick="backHome()">← חזרה</button>
+    <button class="btn btn-ghost btn-sm" onclick="openUpload()">📄 העלה חשבון</button>
+    <input type="file" id="mgr-file" accept=".pdf,image/*,.xlsx,.xls" style="display:none" onchange="handleMgrFile(event)">
+  </div>
+
+  <!-- Hero -->
+  <div class="sv-hero">
+    <div class="h-av" id="mgr-av">🏢</div>
+    <h2 id="mgr-name">שם נכס</h2>
+    <p id="mgr-sub">מנהל נכס</p>
+    <div class="sv-pills" id="mgr-pills"></div>
+  </div>
+
+  <!-- Upload -->
+  <div class="uz-wrap">
+    <h3>📤 העלאת חשבונות חודשיים</h3>
+
+    <!-- בחירת חיבור (מוצג רק אם יש יותר מחיבור אחד) -->
+    <div id="mgr-conn-bar" style="display:none;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
+
+    <!-- Upload tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+      <button class="cat-tab active" id="ut-icp" onclick="switchUZ('icp')">⚡ יח"פ</button>
+      <button class="cat-tab" id="ut-company" onclick="switchUZ('company')">🏢 חברת מניה</button>
+      <button class="cat-tab" id="ut-solar" onclick="switchUZ('solar')">☀️ סולארי</button>
+      <button class="cat-tab" id="ut-ev" onclick="switchUZ('ev')">🔋 EV</button>
+    </div>
+
+    <!-- ICP zone — PDF בלבד -->
+    <div id="uz-zone-icp">
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px">העלה חשבון יח"פ (PDF) — AI מחלץ פסגה/שפל קוט"ש וסכום חשבונית</p>
+      <div class="uz" id="mgr-uz" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleMgrDrop(event,'icp')">
+        <input type="file" accept=".pdf,image/*" onchange="handleMgrFile(event,'icp')">
+        <div id="mgr-uz-c"><div style="font-size:30px;margin-bottom:8px">📄</div><h3>גרור חשבון יח"פ</h3><p>PDF / תמונה</p></div>
+      </div>
+    </div>
+
+    <!-- Company zone — PDF או Excel -->
+    <div id="uz-zone-company" style="display:none">
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px">העלה חשבון חברת מניה או דוח דיירים (Excel) — AI מחלץ סה"כ תשלום כולל קבועים</p>
+      <div class="uz" id="mgr-uz-co" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleMgrDrop(event,'company')">
+        <input type="file" accept=".pdf,image/*,.xlsx,.xls" onchange="handleMgrFile(event,'company')">
+        <div id="mgr-uz-co-c"><div style="font-size:30px;margin-bottom:8px">🏢</div><h3>גרור חשבון / דוח דיירים</h3><p>PDF / Excel — גלרון · QLC · שנאים</p></div>
+      </div>
+    </div>
+
+    <!-- Solar zone -->
+    <div id="uz-zone-solar" style="display:none">
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px">העלה חשבון <strong>חח"י</strong> (חברת חשמל) של מונה נטו — AI מחלץ ייצור / הזרמה / זיכוי. עלות תפעול תנוכה אוטומטית.</p>
+      <div class="uz" id="mgr-uz-sol" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleMgrDrop(event,'solar')">
+        <input type="file" accept=".pdf,image/*,.xlsx,.xls" onchange="handleMgrFile(event,'solar')">
+        <div id="mgr-uz-sol-c"><div style="font-size:30px;margin-bottom:8px">☀️</div><h3>גרור חשבון חח"י סולארי</h3><p>מונה נטו · ייצור · הזרמה · זיכוי</p></div>
+      </div>
+    </div>
+
+    <!-- EV zone -->
+    <div id="uz-zone-ev" style="display:none">
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px">העלה דוח EV-Edge — AI מחלץ רווח AC + DC ללא מע"מ</p>
+      <div class="uz" id="mgr-uz-ev" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleMgrDrop(event,'ev')">
+        <input type="file" accept=".pdf,image/*,.xlsx,.xls" onchange="handleMgrFile(event,'ev')">
+        <div id="mgr-uz-ev-c"><div style="font-size:30px;margin-bottom:8px">🔋</div><h3>גרור דוח EV-Edge</h3><p>Excel חודשי של עמדות הטעינה</p></div>
+      </div>
+    </div>
+
+    <div id="mgr-ex" style="display:none"><div class="exb"><div class="exh"><span>✅</span><h3>נחלץ בהצלחה!</h3><span style="font-size:9px;color:var(--text3);margin-right:auto">Claude AI</span></div><div class="exf" id="mgr-exf"></div></div></div>
+    <div id="mgr-hist-wrap" style="margin-top:14px">
+      <p style="font-size:11px;color:var(--text3);margin-bottom:8px">חשבונות שהועלו החודש:</p>
+      <div class="hist" id="mgr-hist"></div>
+    </div>
+    <div id="mgr-update-wrap" style="display:none;margin-top:14px">
+      <button class="btn btn-acc btn-full" onclick="updateMgrSum()" style="font-size:14px;padding:14px">🔄 עדכן סיכום רווחים</button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="sum-block">
+    <h3>📊 סיכום — <span id="mgr-sum-name">נכס</span></h3>
+    <div class="sum-big"><div class="sl">רווח שנתי כולל</div><div class="sv2" id="mgr-grand">₪0</div><div class="ss" id="mgr-avg">ממוצע חודשי ₪0</div></div>
+    <div class="sum4">
+      <div class="sc2"><div class="sl">⚡ ספק וירטואלי</div><div class="sv" style="color:var(--green)" id="mgr-v">₪0</div><div class="ss2">חיסכון שנתי</div></div>
+      <div class="sc2"><div class="sl">🔌 מכירת מ"נ</div><div class="sv" style="color:var(--orange)" id="mgr-m">₪0</div><div class="ss2">רווח שנתי</div></div>
+      <div class="sc2"><div class="sl">☀️ סולארי</div><div class="sv" style="color:var(--gold)" id="mgr-s">₪0</div><div class="ss2">נטו שנתי</div></div>
+      <div class="sc2"><div class="sl">🔋 EV</div><div class="sv" style="color:var(--purple)" id="mgr-ev">₪0</div><div class="ss2">רווח שנתי</div></div>
+    </div>
+    <div style="background:var(--bg3);border-radius:10px;padding:14px">
+      <table class="mst"><thead><tr><th>חודש</th><th>יח"פ</th><th>מ"נ</th><th>סולארי</th><th>EV</th><th>כולל</th></tr></thead>
+      <tbody id="mgr-tb"></tbody>
+      <tfoot><tr class="tot"><td>סה"כ</td><td id="mgr-tv">₪0</td><td id="mgr-tm">₪0</td><td id="mgr-ts">₪0</td><td id="mgr-tev">₪0</td><td id="mgr-tt" class="pos">₪0</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="sbar" id="mgr-bar"></div>
+    <!-- פירוט לפי חיבור -->
+    <div id="mgr-conn-breakdown" style="display:none;margin-top:12px"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SCREEN: Admin ═══ -->
+<div id="scr-admin" style="display:none">
+<div class="av-wrap">
+  <div class="av-hdr">
+    <div><h2>דשבורד ניהול</h2><p id="adm-date"></p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-acc btn-sm" onclick="openNewSite()">➕ נכס חדש</button>
+      <button class="btn btn-ghost btn-sm" onclick="showAnalytics()">📊 ניתוח רווחים</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportExcel()">📥 Excel</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportData()">💾 שמור נתונים</button>
+      <button class="btn btn-ghost btn-sm" onclick="importData()">📂 טען נתונים</button>
+      <button class="btn btn-ghost btn-sm" onclick="showApiModal()">🔑 API Key</button>
+      <button class="btn btn-ghost btn-sm" onclick="resetAllData()">🗑️ איפוס</button>
+      <button class="btn btn-red btn-sm" onclick="adminLogout()">יציאה</button>
+    </div>
+  </div>
+  <div class="krow">
+    <div class="kpi ca"><div class="kl">⚡ רווח שנתי כולל</div><div class="kv" id="k-tot">₪0</div><div class="ks">כל הנכסים</div></div>
+    <div class="kpi cg"><div class="kl">💚 ספק וירטואלי</div><div class="kv" id="k-v">₪0</div><div class="ks">חיסכון יח"פ</div></div>
+    <div class="kpi co"><div class="kl">🔌 מכירת מ"נ</div><div class="kv" id="k-m">₪0</div><div class="ks">הפרש מתח</div></div>
+    <div class="kpi cgd"><div class="kl">☀️ סולארי + EV</div><div class="kv" id="k-s">₪0</div><div class="ks">נטו שנתי</div></div>
+  </div>
+  <div class="alerts" id="adm-alerts"></div>
+  <div class="adm-grid" id="adm-grid"></div>
+</div>
+</div>
+
+<!-- ═══ SCREEN: Analytics ═══ -->
+<div id="scr-analytics" style="display:none">
+<div class="av-wrap">
+  <div class="av-hdr">
+    <div><h2>📊 ניתוח רווחים</h2><p id="an-date"></p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="showAdminHome()">← ניהול</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportExcel()">📥 ייצוא Excel</button>
+    </div>
+  </div>
+
+  <!-- Period selector -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <span style="font-size:13px;font-weight:700;color:var(--text2)">תקופה:</span>
+    <button class="cat-tab active" id="an-btn-ytd" onclick="setAnPeriod('ytd')">שנה עד היום</button>
+    <button class="cat-tab" id="an-btn-month" onclick="setAnPeriod('month')">חודש נוכחי</button>
+    <button class="cat-tab" id="an-btn-year" onclick="setAnPeriod('year')">
+      <select id="an-year-sel" onclick="event.stopPropagation()" onchange="setAnPeriod('year')"
+        style="background:transparent;border:none;color:inherit;font-family:'Heebo',sans-serif;font-size:12px;cursor:pointer;outline:none"></select>
+    </button>
+  </div>
+
+  <!-- By Site -->
+  <div class="sec" style="margin-bottom:16px">
+    <div class="sec-h" onclick="togAn('site')">
+      <div class="sec-hl"><div class="sec-ico" style="background:rgba(0,200,255,0.1)">🏢</div><div><h3>לפי נכס</h3><p>רווח כולל לכל נכס</p></div></div>
+      <div class="sec-hr"><span class="chev" id="ch-an-site">▼</span></div>
+    </div>
+    <div class="sec-b open" id="sb-an-site">
+      <div style="overflow-x:auto"><table class="mt" id="an-site-tbl" style="min-width:600px">
+        <thead><tr><th>נכס</th><th>קטגוריה</th><th>ספק יח"פ</th><th class="thg">יח"פ (₪)</th><th class="thg">מ"נ (₪)</th><th class="thg">סולארי (₪)</th><th class="thg">EV (₪)</th><th class="thg">סה"כ (₪)</th></tr></thead>
+        <tbody id="an-site-body"></tbody>
+        <tfoot><tr class="tot"><td colspan="3">סה"כ</td><td id="an-sv" class="pos">₪0</td><td id="an-sm" class="pos">₪0</td><td id="an-ss" class="pos">₪0</td><td id="an-sev" class="pos">₪0</td><td id="an-st" class="pos">₪0</td></tr></tfoot>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- By Category -->
+  <div class="sec" style="margin-bottom:16px">
+    <div class="sec-h" onclick="togAn('cat')">
+      <div class="sec-hl"><div class="sec-ico" style="background:rgba(255,213,79,0.1)">🏷️</div><div><h3>לפי קטגוריה</h3><p>מסחרי / לוגיסטי / משרדים / חניונים</p></div></div>
+      <div class="sec-hr"><span class="chev open" id="ch-an-cat">▼</span></div>
+    </div>
+    <div class="sec-b" id="sb-an-cat">
+      <div style="overflow-x:auto"><table class="mt" id="an-cat-tbl" style="min-width:500px">
+        <thead><tr><th>קטגוריה</th><th>מספר נכסים</th><th class="thg">יח"פ (₪)</th><th class="thg">מ"נ (₪)</th><th class="thg">סולארי (₪)</th><th class="thg">EV (₪)</th><th class="thg">סה"כ (₪)</th></tr></thead>
+        <tbody id="an-cat-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- By Supplier -->
+  <div class="sec" style="margin-bottom:16px">
+    <div class="sec-h" onclick="togAn('sup')">
+      <div class="sec-hl"><div class="sec-ico" style="background:rgba(0,230,118,0.1)">⚡</div><div><h3>לפי ספק יח"פ</h3><p>אנלייט / דליה / דוראד / OPC</p></div></div>
+      <div class="sec-hr"><span class="chev open" id="ch-an-sup">▼</span></div>
+    </div>
+    <div class="sec-b" id="sb-an-sup">
+      <div style="overflow-x:auto"><table class="mt" id="an-sup-tbl" style="min-width:500px">
+        <thead><tr><th>ספק יח"פ</th><th>מספר נכסים</th><th class="thg">חיסכון יח"פ (₪)</th><th class="thg">רווח מ"נ (₪)</th><th class="thg">סה"כ (₪)</th></tr></thead>
+        <tbody id="an-sup-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- By Discipline -->
+  <div class="sec" style="margin-bottom:16px">
+    <div class="sec-h" onclick="togAn('disc')">
+      <div class="sec-hl"><div class="sec-ico" style="background:rgba(179,136,255,0.1)">📐</div><div><h3>לפי דיסציפלינה</h3><p>יח"פ / מ"נ / סולארי / EV — פילוח לפי מקור רווח</p></div></div>
+      <div class="sec-hr"><span class="chev open" id="ch-an-disc">▼</span></div>
+    </div>
+    <div class="sec-b open" id="sb-an-disc">
+      <!-- Summary bars -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px" id="an-disc-kpi"></div>
+      <!-- Detail table -->
+      <div style="overflow-x:auto"><table class="mt" id="an-disc-tbl" style="min-width:600px">
+        <thead><tr>
+          <th>נכס</th>
+          <th class="thg" style="background:rgba(0,230,118,0.1);color:var(--green)">⚡ יח"פ (₪)</th>
+          <th class="thg" style="background:rgba(255,152,0,0.1);color:var(--orange)">🔌 מ"נ (₪)</th>
+          <th class="thg" style="background:rgba(255,213,79,0.1);color:var(--gold)">☀️ סולארי (₪)</th>
+          <th class="thg" style="background:rgba(179,136,255,0.1);color:var(--purple)">🔋 EV (₪)</th>
+          <th>% יח"פ</th><th>% מ"נ</th><th>% סולארי</th><th>% EV</th>
+        </tr></thead>
+        <tbody id="an-disc-body"></tbody>
+        <tfoot><tr class="tot">
+          <td>סה"כ</td>
+          <td id="an-dv" class="pos">₪0</td>
+          <td id="an-dm" class="pos">₪0</td>
+          <td id="an-ds" class="pos">₪0</td>
+          <td id="an-dev" class="pos">₪0</td>
+          <td colspan="4" id="an-dtot" class="pos">₪0</td>
+        </tr></tfoot>
+      </table></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ SCREEN: Admin Site Edit ═══ -->
+<div id="scr-adm-site" style="display:none">
+<div class="av-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:13px">
+      <div id="adms-av" style="width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px"></div>
+      <div><h2 id="adms-name" style="font-size:20px;font-weight:900;letter-spacing:-.5px"></h2><p id="adms-sub" style="font-size:11px;color:var(--text3);margin-top:2px"></p></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="showAdminHome()">← ניהול</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('adm-file').click()">📄 העלה</button>
+      <button class="btn btn-acc btn-sm" onclick="saveAdmSite()">💾 שמור</button>
+      <input type="file" id="adm-file" accept=".pdf,image/*,.xlsx,.xls" style="display:none" onchange="handleAdmFile(event)">
+    </div>
+  </div>
+  <div id="adm-conn-indicator" style="display:none;margin-bottom:8px;padding:7px 14px;border-radius:8px;background:rgba(0,200,255,0.08);border:1px solid var(--b2);font-size:12px;font-weight:700;color:var(--acc)"></div>
+  <div class="uz" id="adm-uz" style="margin-bottom:14px" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleAdmDrop(event)">
+    <input type="file" accept=".pdf,image/*,.xlsx,.xls" onchange="handleAdmFile(event)">
+    <div id="adm-uz-c"><div style="font-size:26px;margin-bottom:6px">📄</div><h3>גרור חשבון</h3><p>AI מחלץ אוטומטית</p></div>
+  </div>
+  <div id="adm-ex" style="display:none"><div class="exb"><div class="exh"><span>✅</span><h3>נחלץ</h3><span style="font-size:9px;color:var(--text3);margin-right:auto">Claude AI</span></div><div class="exf" id="adm-exf"></div></div></div>
+  <div class="ctabs" id="adm-ctabs" style="display:none"></div>
+
+  <!-- עלות הפקת חשבון קבועה + אחוז EV -->
+  <div style="background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:var(--text2)">💰 עלות הפקת חשבון חודשית (₪):</span>
+      <input type="number" id="adm-monthly-fee" placeholder="0" min="0" step="1"
+        style="width:80px;background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:5px 8px;color:var(--text);font-family:'Heebo',sans-serif;font-size:12px;text-align:center"
+        oninput="updateMonthlyFee(this.value)">
+    </div>
+    <div id="adm-opex-wrap" style="display:none;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:var(--text2)">☀️ תפעול סולארי חודשי (₪):</span>
+      <input type="number" id="adm-opex" placeholder="0" min="0" step="1"
+        style="width:80px;background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:5px 8px;color:var(--text);font-family:'Heebo',sans-serif;font-size:12px;text-align:center"
+        oninput="updateOpex(this.value)">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:var(--text2)">🔋 אחוז שיתוף EV (%):</span>
+      <input type="number" id="adm-ev-share" placeholder="50" min="0" max="100" step="1"
+        style="width:70px;background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:5px 8px;color:var(--text);font-family:'Heebo',sans-serif;font-size:12px;text-align:center"
+        oninput="updateEvShare(this.value)">
+      <span style="font-size:11px;color:var(--text3)">ברירת מחדל: 50%</span>
+    </div>
+  </div>
+
+  <div class="panels" id="adm-panels"></div>
+  <div class="sum-block" style="margin-top:16px">
+    <h3>📊 סיכום — <span id="adms-sum-name"></span></h3>
+    <div class="sum-big"><div class="sl">רווח שנתי כולל</div><div class="sv2" id="adms-grand">₪0</div><div class="ss" id="adms-avg"></div></div>
+    <div class="sum4" style="grid-template-columns:repeat(4,1fr)">
+      <div class="sc2"><div class="sl">⚡ יח"פ</div><div class="sv" style="color:var(--green)" id="adms-v">₪0</div></div>
+      <div class="sc2"><div class="sl">🔌 מ"נ</div><div class="sv" style="color:var(--orange)" id="adms-m">₪0</div></div>
+      <div class="sc2"><div class="sl">☀️ סולארי</div><div class="sv" style="color:var(--gold)" id="adms-s">₪0</div></div>
+      <div class="sc2"><div class="sl">🔋 EV</div><div class="sv" style="color:var(--purple)" id="adms-ev">₪0</div></div>
+    </div>
+    <div style="background:var(--bg3);border-radius:10px;padding:14px">
+      <table class="mst"><thead><tr><th>חודש</th><th>יח"פ</th><th>מ"נ</th><th>סולארי</th><th>EV</th><th>כולל</th></tr></thead>
+      <tbody id="adms-tb"></tbody>
+      <tfoot><tr class="tot"><td>סה"כ</td><td id="adms-tv">₪0</td><td id="adms-tm">₪0</td><td id="adms-ts">₪0</td><td id="adms-tev">₪0</td><td id="adms-tt" class="pos">₪0</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="sbar" id="adms-bar"></div>
+  </div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+<div class="toast" id="toast"><span id="ti">✅</span><span id="tm">—</span></div>
+
+<script>
+// ══════════════════════════════════════════════
+// CONFIG — שנה כאן סיסמאות
+// ══════════════════════════════════════════════
+const ADMIN_PIN = '1948';
+const SITE_PINS = {
+  'gan-yavne':   '1111',
+  'netivot':     '2222',
+  'sha-hadera':  '3333',
+  'soho':        '4444',
+  'friandly':    '5555',
+  'gadrot':      '6666',
+  'hartov':      '7777',
+  'trigrit':     '8888',
+  'lev-talpiot': '9999',
+  'west-design': '1212',
+  'bartak':      '3434',
+  'berlev':      '5656',
+};
+
+// ══════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════
+const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const DAYS=[31,28,31,30,31,30,31,31,30,31,30,31];
+const SEA=['חורף','חורף','אמצע','אמצע','אמצע','קיץ','קיץ','קיץ','קיץ','אמצע','חורף','חורף'];
+const TR={קיץ:{pk:1.3313,of:0.3367,pk_n:1.4597,of_n:0.4358,pr_pk:1.1376,pr_of:0.2054},חורף:{pk:0.8628,of:0.304,pk_n:0.9774,of_n:0.4022,pr_pk:0.6984,pr_of:0.1749},אמצע:{pk:0.3304,of:0.2965,pk_n:0.4293,of_n:0.3945,pr_pk:0.1995,pr_of:0.1679}};
+const VMG=8104.796274/3811, VMN=1679.867918/3811;
+const COLS=['rgba(0,200,255,0.15)','rgba(0,230,118,0.12)','rgba(255,213,79,0.12)','rgba(255,152,0,0.12)','rgba(179,136,255,0.12)','rgba(255,82,82,0.12)'];
+
+function mkC(o={}){return{kva:1000,volt:'high',co:'',cc:'',cs:'',mc:'',ms:'',icp:'',disc:9,solar:'none',fmg:602,fmn:253.16,opex:0,monthly_fee:0,ev_share:50,v:MONTHS.map(()=>({pk:0,of:0,inv:null,ten:null,fee:null})),st:MONTHS.map(()=>({fo:0,fp:0,co:0,cp:0,yi:0,cc2:0})),sn:MONTHS.map(()=>({bp:0,bo:0,fp:0,fo:0,cr:0})),ev:MONTHS.map(()=>({ac:0,dc:0})),...o}}
+
+// ══════════════════════════════════════════════
+// SITES DATA
+// ══════════════════════════════════════════════
+const DEFAULT_SITES=[
+  {id:'gan-yavne',name:'גן יבנה',sub:'מרכז מסחרי — דוראד / QLC',av:'🏬',col:COLS[0],cat:'commercial',connNames:null,
+   conns:[mkC({kva:2453,volt:'high',co:'QLC',cc:'347404978-1',cs:'347404978-1',mc:'85214066265',ms:'22005374',icp:'דוראד',disc:9,solar:'tariff',opex:2073})],uploaded:[]},
+
+  {id:'netivot',name:'נתיבות',sub:'קניון גלובוס — דליה / גלרון',av:'🏛',col:COLS[1],cat:'commercial',connNames:['חיבור א — דליה','חיבור ב — גלרון'],
+   conns:[mkC({kva:1246,volt:'high',co:'גלרון',cc:'347280775',mc:'85306150898',icp:'דליה',disc:9.95,solar:'none',monthly_fee:1058}),mkC({kva:1600,volt:'high',co:'גלרון',cc:'342275891',cs:'342275891',mc:'85212590277',ms:'12500996',icp:'דליה',disc:9.95,solar:'net',monthly_fee:1274})],uploaded:[]},
+
+  {id:'sha-hadera',name:'שערי חדרה',sub:'מרכז מסחרי — אנלייט / QLC',av:'🏪',col:COLS[2],cat:'commercial',connNames:['חיבור 1','חיבור 2','חיבור 3','חיבור 4'],
+   conns:[mkC({kva:218.24,volt:'low',co:'QLC',cc:'341537304',icp:'אנלייט',disc:11.5,solar:'net',opex:1823}),mkC({kva:86.6,volt:'low',co:'QLC',cc:'341564800',icp:'אנלייט',disc:11.5,solar:'net'}),mkC({kva:138.56,volt:'low',co:'QLC',cc:'341592487',icp:'אנלייט',disc:11.5,solar:'net'}),mkC({kva:17.32,volt:'low',co:'QLC',cc:'341558536',icp:'אנלייט',disc:11.5,solar:'net'})],uploaded:[]},
+
+  {id:'soho',name:'סוהו נתניה',sub:'מרכז מסחרי — OPC / QLC',av:'🏗',col:COLS[3],cat:'commercial',connNames:null,
+   conns:[mkC({kva:4572,volt:'high',co:'QLC',cc:'346486151',mc:'14067009',icp:'OPC',disc:8,solar:'tariff'})],uploaded:[]},
+
+  {id:'friandly',name:'פרנדלי עפולה',sub:'מרכז מסחרי — דוראד / QLC',av:'🏘',col:COLS[4],cat:'commercial',connNames:null,
+   conns:[mkC({kva:3811,volt:'high',co:'QLC',cc:'347918546-1',cs:'347918546-1',mc:'86017000298',icp:'דוראד',disc:9,solar:'tariff',opex:848})],uploaded:[]},
+
+  {id:'gadrot',name:'גדרות',sub:'נכס — אנלייט / סייטק',av:'🏠',col:COLS[5],cat:'commercial',connNames:null,
+   conns:[mkC({kva:630,volt:'low',co:'סייטק',cc:'348066127',cs:'348875855',mc:'21001846',ms:'24003917',icp:'אנלייט',disc:11.5,solar:'tariff'})],uploaded:[]},
+
+  {id:'hartov',name:'הרטוב',sub:'נכס — אנלייט / גלרון',av:'🏢',col:COLS[0],cat:'commercial',connNames:null,
+   conns:[mkC({kva:1000,volt:'high',co:'גלרון',cc:'348127378',mc:'22003190',icp:'אנלייט',disc:11.5})],uploaded:[]},
+
+  {id:'trigrit',name:'טריגריט',sub:'נכס — אנלייט / גלרון',av:'🏬',col:COLS[1],cat:'commercial',connNames:null,
+   conns:[mkC({kva:2200,volt:'high',co:'גלרון',cc:'348875855',cs:'348875855',mc:'24000143',ms:'24008014',icp:'אנלייט',disc:11.5,solar:'tariff',opex:3500})],uploaded:[]},
+
+  {id:'lev-talpiot',name:'לב תלפיות',sub:'מרכז מסחרי — דליה / גלרון',av:'🏛',col:COLS[2],cat:'commercial',connNames:null,
+   conns:[mkC({kva:2837,volt:'high',co:'גלרון',cc:'341111921',mc:'85309152663',icp:'דליה',disc:9.95})],uploaded:[]},
+
+  {id:'west-design',name:'West Design',sub:'נכס — אנלייט / סייטק',av:'🏪',col:COLS[3],cat:'commercial',connNames:null,
+   conns:[mkC({kva:2248,volt:'high',co:'סייטק',cc:'342269824',mc:'14018292',icp:'אנלייט',disc:11.5})],uploaded:[]},
+
+  {id:'bartak',name:'ברטק נשר',sub:'נכס — אנלייט / סייטק',av:'🏗',col:COLS[4],cat:'commercial',connNames:null,
+   conns:[mkC({kva:1905,volt:'high',co:'סייטק',cc:'340857877',mc:'6152212',icp:'אנלייט',disc:11.5})],uploaded:[]},
+
+  {id:'berlev',name:'ברלב',sub:'נכס — אנלייט / סייטק',av:'🏘',col:COLS[5],cat:'commercial',connNames:null,
+   conns:[mkC({kva:436.48,volt:'low',co:'סייטק',cc:'341526647',mc:'17000891',icp:'אנלייט',disc:11.5})],uploaded:[]},
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let SITES = JSON.parse(JSON.stringify(DEFAULT_SITES));
+let CUR_SITE = null;
+let CUR_CONN = 0;
+let LOGIN_TARGET = null; // site id or 'admin'
+
+function loadState(){
+  try{
+    const saved = localStorage.getItem('pp6');
+    if(!saved) return;
+    const parsed = JSON.parse(saved);
+    SITES = DEFAULT_SITES.map(def=>{
+      const s = parsed.find(x=>x.id===def.id);
+      if(!s) return def;
+      return{...def, uploaded:s.uploaded||[],
+        conns: def.conns.map((dc,ci)=>{
+          const sc = s.conns?.[ci]; if(!sc) return dc;
+          return{...dc, v:sc.v||dc.v, st:sc.st||dc.st, sn:sc.sn||dc.sn, ev:sc.ev||dc.ev,
+            monthly_fee: (sc.monthly_fee!=null && sc.monthly_fee>0) ? sc.monthly_fee : dc.monthly_fee,
+            ev_share: sc.ev_share!=null ? sc.ev_share : dc.ev_share
+          };
+        })
+      };
+    });
+  }catch(e){}
+}
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzE1xaZ3r4rtrP9AdFf4UR3y4XPKw4yzy8rhply_UBsxw0uyA5ulahf4znfs-iJwoQ/exec';
+
+function saveState(){
+  try{
+    localStorage.setItem('pp6',JSON.stringify(SITES));
+  }catch(e){
+    try{
+      const data = JSON.stringify(SITES);
+      document.cookie = 'pp6=' + encodeURIComponent(data) + ';max-age=31536000;path=/';
+    }catch(e2){}
+  }
+  // שמירה ל-Google Sheets בענן
+  try{
+    fetch(SHEETS_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'save', data: SITES})
+    });
+  }catch(e){}
+}
+
+async function loadFromSheets(){
+  try{
+    const resp = await fetch(SHEETS_URL + '?action=load', {method:'GET'});
+    const json = await resp.json();
+    if(json && json.data && Array.isArray(json.data)){
+      const parsed = json.data;
+      SITES = DEFAULT_SITES.map(def=>{
+        const s = parsed.find(x=>x.id===def.id);
+        if(!s) return def;
+        return{...def, uploaded:s.uploaded||[],
+          conns: def.conns.map((dc,ci)=>{
+            const sc = s.conns?.[ci]; if(!sc) return dc;
+            return{...dc, v:sc.v||dc.v, st:sc.st||dc.st, sn:sc.sn||dc.sn, ev:sc.ev||dc.ev,
+              monthly_fee: (sc.monthly_fee!=null && sc.monthly_fee>0) ? sc.monthly_fee : dc.monthly_fee,
+              ev_share: sc.ev_share!=null ? sc.ev_share : dc.ev_share
+            };
+          })
+        };
+      });
+      localStorage.setItem('pp6', JSON.stringify(SITES));
+      toast('☁️','נתונים נטענו מהענן');
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(SITES,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='powerprofit_data_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('💾','נתונים יוצאו לקובץ JSON');
+}
+function importData(){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='.json';
+  inp.onchange=e=>{
+    const fr=new FileReader();
+    fr.onload=ev=>{
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        SITES=DEFAULT_SITES.map(def=>{
+          const s=parsed.find(x=>x.id===def.id);
+          if(!s)return def;
+          return{...def,uploaded:s.uploaded||[],
+            conns:def.conns.map((dc,ci)=>{
+              const sc=s.conns?.[ci];if(!sc)return dc;
+              return{...dc,v:sc.v||dc.v,st:sc.st||dc.st,sn:sc.sn||dc.sn,ev:sc.ev||dc.ev,
+                monthly_fee:(sc.monthly_fee!=null&&sc.monthly_fee>0)?sc.monthly_fee:dc.monthly_fee,
+                ev_share:sc.ev_share!=null?sc.ev_share:dc.ev_share
+              };
+            })
+          };
+        });
+        saveState();
+        toast('✅','נתונים נטענו בהצלחה');
+        showAdminHome();
+      }catch(e){toast('⚠️','שגיאה בטעינת קובץ')}
+    };
+    fr.readAsText(e.target.files[0]);
+  };
+  inp.click();
+}
+function resetAllData(){
+  if(!confirm('למחוק את כל הנתונים שהוזנו? פעולה זו אינה ניתנת לביטול.'))return;
+  try{localStorage.removeItem('pp6')}catch(e){}
+  SITES=JSON.parse(JSON.stringify(DEFAULT_SITES));
+  toast('🗑️','כל הנתונים אופסו');
+  showAdminHome();
+}
+loadState();
+// נסה לטעון מהענן בהתחלה
+loadFromSheets().then(loaded=>{
+  if(loaded){
+    if(sessionStorage.getItem('admin_ok')==='1'){showAdminHome()}else{showScr('home');initHome()}
+  }
+});
+
+// ══════════════════════════════════════════════
+// CALC
+// ══════════════════════════════════════════════
+function calcConn(c){
+  const d=c.disc/100, low=c.volt==='low';
+  let tV=0,tM=0,tS=0,tEV=0;
+  const monthly=MONTHS.map((_,i)=>{
+    const t=TR[SEA[i]];
+    const pk=c.v[i].pk||0, of=c.v[i].of||0;
+    const rate_pk=low?t.pk_n:t.pk, rate_of=low?t.of_n:t.of;
+    // תעריף יח"פ = תעו"ז*(1-הנחה) + (תעו"ז-רכיב_ייצור)*הנחה = תעו"ז - רכיב_ייצור*הנחה
+    const rate_icp_pk=low ? t.pk_n - t.pr_pk*d : t.pk - t.pr_pk*d;
+    const rate_icp_of=low ? t.of_n - t.pr_of*d : t.of - t.pr_of*d;
+
+    // עלות חח"י (ללא הנחה) = col20
+    const iec = pk*rate_pk + of*rate_of;
+    // עלות יח"פ (כולל הנחה) = col21
+    const icp_cost = pk*rate_icp_pk + of*rate_icp_of;
+    // רווח יח"פ פוטנציאלי = col22 (W)
+    const save_potential = iec - icp_cost;
+    // עלות חח"י מלאה כולל קבועים = col25 (Z)
+    const chaluka_aspaka_icp = low ? 253.16 : 602;
+    const kibolet_icp = (low ? 5.19 : 25.04) * c.kva * DAYS[i] / 365;
+    const iec_full_icp = iec + chaluka_aspaka_icp + kibolet_icp;
+    // חשבונית יח"פ בפועל = col27 (AB) — מהחשבון שהועלה
+    const inv = c.v[i].inv||0;
+    // רווח יח"פ בפועל = Z - AB (col25 - col27)
+    const save = inv>0 ? (iec_full_icp - inv) : save_potential;
+    // פער = רווח פוטנציאלי - רווח בפועל
+    const save_gap = inv>0 ? Math.abs(save_potential - save) : 0;
+    const save_alert = save_gap > 200; // נורה אדומה אם פער > ₪200
+
+    // רווח מ"נ = חשבון דיירים - עלות חח"י מלאה - עלות הפקה
+    // עלות חח"י מלאה = אנרגיה + חלוקה+אספקה + קיבולת (KVA × תעריף × ימים/365)
+    const ten = c.v[i].ten||0;
+    // עלות הפקה: מהחשבון (אם חולץ) או מהגדרת הנכס — לא שניהם
+    const fee = (c.v[i].fee != null && c.v[i].fee > 0) ? c.v[i].fee : (c.monthly_fee||0);
+    const RATE_KIB_MG = 25.04;   // ₪ לKVA לשנה — מתח גבוה
+    const RATE_KIB_MN = 5.19;    // ₪ לKVA לשנה — מתח נמוך
+    const chaluka_aspaka = low ? 253.16 : 602;
+    const kibolet = (low ? RATE_KIB_MN : RATE_KIB_MG) * c.kva * DAYS[i] / 365;
+    const iec_full = iec + chaluka_aspaka + kibolet;
+    const inv_ok = c.v[i].inv != null && c.v[i].inv > 0;
+    const mnP = (ten>0 && inv_ok) ? (ten - iec_full - fee) : 0;
+
+    // סולארי
+    let solN=0;
+    if(c.solar==='tariff'){
+      const s=c.st[i];
+      const yi=s.yi||0;
+      const cons_of=s.co||0, cons_pk=s.cp||0;
+      const sell_profit = (rate_pk-rate_icp_pk)*cons_pk + (rate_of-rate_icp_of)*cons_of;
+      const hasData = yi||cons_of||cons_pk;
+      solN = hasData ? yi + sell_profit - (c.opex/12||0) : 0;
+    }
+    if(c.solar==='net'){
+      const sn=c.sn[i];
+      const cr=sn.cr||0; // net_credit שחושב או הוזן ישירות
+      // אם יש נתונים גולמיים — חשב אוטומטית
+      // net_credit = תעריף_הגנה + הזרמה×תעריף + צריכה_מייצור×תעריף
+      const feed_of=sn.fo||0, feed_pk=sn.fp||0;
+      const prod_of=sn.bo||0, prod_pk=sn.bp||0; // ייצור שפל/פסגה
+      const hagana=sn.cr||0; // תעריף הגנה נטו (₪)
+      // צריכה מייצור = ייצור - הזרמה
+      const cons_of_net = prod_of - feed_of;
+      const cons_pk_net = prod_pk - feed_pk;
+      // רווח = הגנה + הזרמה×תעריף + צריכה_מייצור×תעריף
+      const hasRaw = prod_of||prod_pk||feed_of||feed_pk;
+      if(hasRaw){
+        const feed_profit = feed_of*rate_of + feed_pk*rate_pk;
+        const cons_profit = cons_of_net*rate_of + cons_pk_net*rate_pk;
+        solN = (hagana + feed_profit + cons_profit) - (c.opex/12||0);
+      } else {
+        solN = cr ? cr - (c.opex/12||0) : 0;
+      }
+    }
+
+    const evN=((c.ev[i].ac||0)+(c.ev[i].dc||0)) * (c.ev_share||50) / 100;
+    tV+=save; tM+=mnP; tS+=solN; tEV+=evN;
+    return{i,save,save_potential,save_gap,save_alert,mnP,solN,evN,iec,iec_full,icp_cost,rate_pk,rate_of,ten,fee};
+  });
+  return{monthly,tV,tM,tS,tEV};
+}
+function calcSite(s){
+  let tV=0,tM=0,tS=0,tEV=0;
+  s.conns.forEach(c=>{const r=calcConn(c);tV+=r.tV;tM+=r.tM;tS+=r.tS;tEV+=r.tEV});
+  return{tV,tM,tS,tEV};
+}
+
+// ══════════════════════════════════════════════
+// LOGIN MODAL
+// ══════════════════════════════════════════════
+function openLogin(target){
+  LOGIN_TARGET = target;
+  const isAdmin = target==='admin';
+  const s = isAdmin ? null : SITES.find(x=>x.id===target);
+  document.getElementById('modal-icon').textContent = isAdmin?'👑':'🔐';
+  document.getElementById('modal-title').textContent = isAdmin?'כניסת מנהל מערכת':`כניסה ל${s?.name||'נכס'}`;
+  document.getElementById('modal-desc').textContent = isAdmin?'הזן קוד מנהל לגישה מלאה':'הזן קוד גישה לנכס זה';
+  document.getElementById('pin-err').className='pin-err hide';
+  [0,1,2,3].forEach(i=>{const el=document.getElementById('p'+i);el.value='';el.className='pin-box'});
+  document.getElementById('modal-login').classList.add('on');
+  setTimeout(()=>document.getElementById('p0').focus(),150);
+}
+function closeModal(){document.getElementById('modal-login').classList.remove('on');LOGIN_TARGET=null}
+
+function pinInput(idx){
+  const el=document.getElementById('p'+idx);
+  el.classList.toggle('filled',!!el.value);
+  if(el.value && idx<3) document.getElementById('p'+(idx+1)).focus();
+  if(idx===3 && el.value) checkPin();
+}
+function pinKey(e,idx){
+  if(e.key==='Backspace'&&!document.getElementById('p'+idx).value&&idx>0){
+    document.getElementById('p'+(idx-1)).focus();
+  }
+  if(e.key==='Escape') closeModal();
+  if(e.key==='Enter') checkPin();
+}
+function getPin(){return [0,1,2,3].map(i=>document.getElementById('p'+i).value).join('')}
+
+function checkPin(){
+  const pin=getPin();
+  const target=LOGIN_TARGET;
+  const correct = target==='admin' ? ADMIN_PIN : SITE_PINS[target];
+  if(pin===correct){
+    closeModal();
+    if(target==='admin'){
+      sessionStorage.setItem('admin_ok','1');
+      showAdminHome();
+    } else {
+      CUR_SITE=target; CUR_CONN=0;
+      showSiteManager();
+    }
+  } else {
+    document.getElementById('pin-err').className='pin-err';
+    [0,1,2,3].forEach(i=>{const el=document.getElementById('p'+i);el.value='';el.className='pin-box'});
+    document.getElementById('p0').focus();
+    setTimeout(()=>document.getElementById('pin-err').className='pin-err hide',2000);
+  }
+}
+
+// ══════════════════════════════════════════════
+// SCREENS
+// ══════════════════════════════════════════════
+function showScr(id){['home','site','admin','adm-site','analytics'].forEach(s=>document.getElementById('scr-'+s).style.display=s===id?'':'none')}
+
+let CUR_CAT='commercial';
+
+function initHome(){
+  document.getElementById('home-date').textContent='עדכון: '+new Date().toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('nav-sub').textContent='מערכת רווחי חשמל — ריט 1';
+  document.getElementById('nav-right').innerHTML='';
+  // Update counts on tabs
+  ['commercial','logistics','offices','parking'].forEach(cat=>{
+    const n=SITES.filter(s=>s.cat===cat).length;
+    const el=document.getElementById('cc-'+cat);
+    if(el)el.textContent=n;
+  });
+  renderSitesGrid(CUR_CAT);
+}
+
+function switchCat(cat){
+  CUR_CAT=cat;
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('cat-'+cat).classList.add('active');
+  renderSitesGrid(cat);
+}
+
+function renderSitesGrid(cat){
+  const now=new Date(),cm=now.getMonth(),cy=now.getFullYear();
+  const grid=document.getElementById('sites-grid');
+  const empty=document.getElementById('cat-empty');
+  const filtered=SITES.filter(s=>s.cat===cat);
+  grid.innerHTML='';
+  if(!filtered.length){grid.style.display='none';empty.style.display='block';return}
+  grid.style.display=''; empty.style.display='none';
+  filtered.forEach(s=>{
+    const hasM=s.uploaded?.some(u=>u.month===cm&&u.year===cy);
+    const lastUp=s.uploaded?.length?s.uploaded[s.uploaded.length-1]:null;
+    const uploadCount=s.uploaded?.filter(u=>u.year===cy).length||0;
+    grid.innerHTML+=`<div class="site-card" onclick="openLogin('${s.id}')">
+      <div class="sc-top">
+        <div class="sc-av" style="background:${s.col}">${s.av}</div>
+        <div><h3>${s.name}</h3><p>${s.conns[0].icp} · ${s.conns[0].co}</p></div>
+        <span class="sc-status ${hasM?'st-ok':'st-warn'}">${hasM?'✓ עדכני':'⏳ ממתין'}</span>
+      </div>
+      <div class="sc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div class="sc-m"><div class="ml">סוג מתח</div><div class="mv">${s.conns[0].volt==='high'?'מ"ג':'מ"נ'} / ${s.conns[0].kva} KVA</div></div>
+          <div class="sc-m"><div class="ml">דוחות השנה</div><div class="mv" style="color:var(--acc)">${uploadCount}</div></div>
+          <div class="sc-m"><div class="ml">עדכון אחרון</div><div class="mv" style="font-size:11px">${lastUp?MONTHS[lastUp.month]+' '+lastUp.year:'—'}</div></div>
+          <div class="sc-m"><div class="ml">חיבורים</div><div class="mv">${s.conns.length}</div></div>
+        </div>
+      </div>
+      <div class="sc-foot"><span>${s.conns[0].icp} · ${s.conns.length>1?s.conns.length+' חיבורים':'חיבור בודד'}</span><span style="color:var(--acc)">כניסה ←</span></div>
+    </div>`;
+  });
+}
+
+function backHome(){showScr('home');initHome()}
+
+// ══════════════════════════════════════════════
+// SITE MANAGER
+// ══════════════════════════════════════════════
+function showSiteManager(){
+  const s=SITES.find(x=>x.id===CUR_SITE); if(!s)return;
+  CUR_CONN=0;
+  const c=s.conns[0];
+  document.getElementById('nav-sub').textContent=s.name;
+  document.getElementById('mgr-av').textContent=s.av;
+  document.getElementById('mgr-av').style.background=s.col||COLS[0];
+  se('mgr-name',s.name); se('mgr-sub',c.icp+' · '+c.co);
+  document.getElementById('mgr-pills').innerHTML=`<span class="pill">${c.icp}</span><span class="pill">${c.co}</span><span class="pill">${c.volt==='high'?'מ"ג':'מ"נ'} / ${c.kva} KVA</span>${c.solar!=='none'?'<span class="pill">☀️ סולארי</span>':''}${s.conns.some(x=>x.ev.some(m=>m.ac||m.dc))?'<span class="pill">🔋 EV</span>':''}`;
+  se('mgr-sum-name',s.name);
+  // הצג בחירת חיבור אם יש יותר מאחד
+  const connBar = document.getElementById('mgr-conn-bar');
+  if(s.conns.length > 1){
+    connBar.style.display='flex';
+    connBar.innerHTML = s.conns.map((cn,i)=>`<button class="cat-tab ${i===0?'active':''}" onclick="switchMgrConn(${i})">${s.connNames?s.connNames[i]:'חיבור '+(i+1)} — ${cn.icp}</button>`).join('');
+  } else {
+    connBar.style.display='none';
+  }
+  resetUZ('mgr-uz','mgr-uz-c'); document.getElementById('mgr-ex').style.display='none';
+  // הצג/הסתר tab סולארי לפי חיבור ראשון
+  const solTab=document.getElementById('ut-solar');
+  if(solTab) solTab.style.display=(c.solar&&c.solar!=='none')?'':'none';
+  switchUZ('icp');
+  renderMgrHist(); renderMgrSum();
+  showScr('site');
+}
+
+function switchMgrConn(i){
+  CUR_CONN=i;
+  document.querySelectorAll('#mgr-conn-bar .cat-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  // הצג/הסתר tab סולארי לפי אסדרה של החיבור
+  const s=SITES.find(x=>x.id===CUR_SITE);
+  const c=s?.conns[i];
+  const solTab=document.getElementById('ut-solar');
+  if(solTab) solTab.style.display=(c?.solar&&c.solar!=='none')?'':'none';
+  switchUZ('icp'); // חזור לברירת מחדל
+  renderMgrHist();
+}
+function openUpload(){document.getElementById('mgr-file').click()}
+function switchUZ(type){
+  ['icp','company','solar','ev'].forEach(t=>{
+    const z=document.getElementById('uz-zone-'+t);
+    const b=document.getElementById('ut-'+t);
+    if(z) z.style.display=t===type?'':'none';
+    if(b) b.classList.toggle('active',t===type);
+  });
+}
+function handleMgrDrop(e,hint){e.preventDefault();document.getElementById('mgr-uz').classList.remove('drag');procFile(e.dataTransfer.files[0],'mgr',hint)}
+function handleMgrFile(e,hint){procFile(e.target.files[0],'mgr',hint);e.target.value=''}
+
+function renderMgrHist(){
+  const s=SITES.find(x=>x.id===CUR_SITE); if(!s)return;
+  const now=new Date(),cm=now.getMonth(),cy=now.getFullYear();
+  const items=s.uploaded?.filter(u=>u.month===cm&&u.year===cy)||[];
+  const TLBL={'icp':'⚡ יח"פ','company':'🏢 חברת מניה','solar_yield':'☀️ ייצור','solar_consume':'☀️ צריכה מייצור','solar_net':'☀️ מונה נטו','ev':'🔋 EV'};
+  const TCOL={'icp':'rgba(0,230,118,0.6)','company':'rgba(0,200,255,0.6)','solar_yield':'rgba(255,213,79,0.6)','solar_consume':'rgba(255,152,0,0.6)','solar_net':'rgba(255,213,79,0.6)','ev':'rgba(179,136,255,0.6)'};
+  const h=document.getElementById('mgr-hist');
+  h.innerHTML=items.length?items.map(u=>`<div class="hi"><div class="hi-dot" style="background:${TCOL[u.type]||'#888'}"></div><span style="font-weight:600">${TLBL[u.type]||u.type}</span><span style="margin-right:auto;color:var(--text3);font-size:11px">${MONTHS[u.month]} · ${u.time||''}</span><span style="color:var(--green);font-size:11px">✓</span></div>`).join(''):`<p style="font-size:12px;color:var(--text3);padding:8px 0">אין חשבונות שהועלו החודש</p>`;
+  // הצג כפתור עדכון אם יש חשבונות
+  const wrap=document.getElementById('mgr-update-wrap');
+  if(wrap) wrap.style.display=items.length?'block':'none';
+}
+
+function updateMgrSum(){
+  renderMgrSum();
+  toast('✅','הסיכום עודכן!');
+}
+function renderMgrSum(){
+  const s=SITES.find(x=>x.id===CUR_SITE); if(!s)return;
+  let tV=0,tM=0,tS=0,tEV=0; const ms=MONTHS.map(()=>({v:0,m:0,s:0,ev:0,alert:false}));
+  s.conns.forEach(c=>{const r=calcConn(c);tV+=r.tV;tM+=r.tM;tS+=r.tS;tEV+=r.tEV;r.monthly.forEach(({i,save,mnP,solN,evN,save_alert})=>{ms[i].v+=save;ms[i].m+=mnP;ms[i].s+=solN;ms[i].ev+=evN;if(save_alert)ms[i].alert=true;})});
+  const g=tV+tM+tS+tEV;
+  se('mgr-grand',f(g)); se('mgr-avg','ממוצע חודשי '+f(g/12));
+  se('mgr-v',f(tV)); se('mgr-m',f(tM)); se('mgr-s',f(tS)); se('mgr-ev',f(tEV));
+  const tb=document.getElementById('mgr-tb'); tb.innerHTML='';
+  let sv=0,sm=0,ss=0,sev=0;
+  ms.forEach((m,i)=>{const tot=m.v+m.m+m.s+m.ev;sv+=m.v;sm+=m.m;ss+=m.s;sev+=m.ev;
+    const alertIcon=m.alert?'🔴 ':'';
+    const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${MONTHS[i]}</td><td class="${m.v>=0?'pos':'neg'}">${alertIcon}${f(m.v)}</td><td class="${m.m>=0?'pos':'neg'}">${f(m.m)}</td><td class="${m.s>=0?'pos':'neg'}">${f(m.s)}</td><td class="${m.ev>=0?'pos':'neg'}">${f(m.ev)}</td><td class="${tot>=0?'pos':'neg'}" style="font-weight:700">${f(tot)}</td>`;tb.appendChild(tr)});
+  se('mgr-tv',f(sv));se('mgr-tm',f(sm));se('mgr-ts',f(ss));se('mgr-tev',f(sev));seCls('mgr-tt',f(g),g>=0?'pos':'neg');
+  const tt=Math.abs(tV)+Math.abs(tM)+Math.abs(tS)+Math.abs(tEV)||1;
+  document.getElementById('mgr-bar').innerHTML=`<div style="flex:${Math.abs(tV)/tt};background:rgba(0,230,118,0.6)"></div><div style="flex:${Math.abs(tM)/tt};background:rgba(255,152,0,0.6)"></div><div style="flex:${Math.abs(tS)/tt};background:rgba(255,213,79,0.6)"></div><div style="flex:${Math.abs(tEV)/tt};background:rgba(179,136,255,0.6)"></div>`;
+
+  // פירוט לפי חיבור — רק אם יש יותר מחיבור אחד
+  const connBreak = document.getElementById('mgr-conn-breakdown');
+  if(connBreak){
+    if(s.conns.length > 1){
+      connBreak.style.display='block';
+      connBreak.innerHTML = s.conns.map((c,ci)=>{
+        const r=calcConn(c);
+        const cg=r.tV+r.tM+r.tS+r.tEV;
+        const name=s.connNames?s.connNames[ci]:'חיבור '+(ci+1);
+        return `<div style="background:var(--bg3);border:1px solid var(--b);border-radius:var(--r);padding:10px 14px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700;font-size:13px">${name} — ${c.icp}</span>
+            <span class="${cg>=0?'pos':'neg'}" style="font-weight:900;font-size:14px">${f(cg)}</span>
+          </div>
+          <div style="display:flex;gap:10px;font-size:11px;color:var(--text3)">
+            <span>⚡ ${f(r.tV)}</span>
+            <span>🔌 ${f(r.tM)}</span>
+            ${r.tS?`<span>☀️ ${f(r.tS)}</span>`:''}
+            ${r.tEV?`<span>🔋 ${f(r.tEV)}</span>`:''}
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      connBreak.style.display='none';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════
+function showAdminHome(){
+  document.getElementById('nav-sub').textContent='ניהול מערכת';
+  document.getElementById('nav-right').innerHTML='<div style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;background:rgba(255,213,79,0.08);border:1px solid rgba(255,213,79,0.2);font-size:11px;color:var(--gold)">👑 מנהל מערכת</div>';
+  document.getElementById('adm-date').textContent='עדכון: '+new Date().toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  const now=new Date(),cm=now.getMonth(),cy=now.getFullYear();
+  const alerts=document.getElementById('adm-alerts'); alerts.innerHTML='';
+  const grid=document.getElementById('adm-grid'); grid.innerHTML='';
+  let tV=0,tM=0,tS=0,tEV=0;
+  SITES.forEach(s=>{
+    const c=calcSite(s); tV+=c.tV;tM+=c.tM;tS+=c.tS;tEV+=c.tEV;
+    const tot=c.tV+c.tM+c.tS+c.tEV;
+    const hasM=s.uploaded?.some(u=>u.month===cm&&u.year===cy);
+    if(!hasM) alerts.innerHTML+=`<div class="alrt">⚠️ <strong>${s.name}</strong> — חסר חשבון לחודש ${MONTHS[cm]}<button onclick="openAdmSite('${s.id}')">העלה עכשיו →</button></div>`;
+    const tt=Math.abs(c.tV)+Math.abs(c.tM)+Math.abs(c.tS)+Math.abs(c.tEV)||1;
+    grid.innerHTML+=`<div class="site-card" onclick="openAdmSite('${s.id}')">
+      <div class="sc-top"><div class="sc-av" style="background:${s.col}">${s.av}</div><div><h3>${s.name}</h3><p>${s.conns[0].icp} · ${s.conns[0].co}${s.conns.length>1?' · '+s.conns.length+' חיבורים':''}</p></div><span class="sc-status ${hasM?'st-ok':'st-warn'}">${hasM?'✓':'⏳'}</span></div>
+      <div class="sc-body">
+        <div class="sc-metrics">
+          <div class="sc-m"><div class="ml">יח"פ</div><div class="mv" style="color:var(--green)">${fK(c.tV)}</div></div>
+          <div class="sc-m"><div class="ml">מ"נ</div><div class="mv" style="color:var(--orange)">${fK(c.tM)}</div></div>
+          <div class="sc-m"><div class="ml">סולארי+EV</div><div class="mv" style="color:var(--gold)">${fK(c.tS+c.tEV)}</div></div>
+        </div>
+        <div class="sc-bar"><div style="flex:${Math.abs(c.tV)/tt};background:rgba(0,230,118,0.55)"></div><div style="flex:${Math.abs(c.tM)/tt};background:rgba(255,152,0,0.55)"></div><div style="flex:${Math.abs(c.tS)/tt};background:rgba(255,213,79,0.55)"></div><div style="flex:${Math.abs(c.tEV)/tt};background:rgba(179,136,255,0.55)"></div></div>
+        <div style="margin-top:8px;background:var(--bg3);border-radius:7px;padding:7px 10px;border:1px solid var(--b);font-size:10px;color:var(--text3)">
+          ${s.conns.map((conn,ci)=>`
+            ${s.conns.length>1?`<div style="color:var(--acc);font-weight:700;margin-bottom:3px">${s.connNames?s.connNames[ci]:'חיבור '+(ci+1)}</div>`:''}
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>חוזה צריכה:</span><code style="color:var(--text2);direction:ltr">${conn.cc||'—'}</code></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:${ci<s.conns.length-1?'8':'3'}px"><span>מונה צריכה:</span><code style="color:var(--text2);direction:ltr">${conn.mc||'—'}</code></div>
+          `).join('')}
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--b);padding-top:4px;margin-top:2px"><span>הנחה:</span><span style="color:var(--green);font-weight:700">${s.conns[0].disc}% · PIN: ${SITE_PINS[s.id]}</span></div>
+        </div>
+      </div>
+      <div class="sc-foot"><span>ממוצע: ${f(tot/12)}</span><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-red btn-sm" style="padding:3px 10px;font-size:11px" onclick="event.stopPropagation();openResetModal('${s.id}')">🗑️ איפוס</button><span style="color:var(--acc)">עריכה ←</span></div></div>
+    </div>`;
+  });
+  se('k-tot',fK(tV+tM+tS+tEV));se('k-v',fK(tV));se('k-m',fK(tM));se('k-s',fK(tS+tEV));
+  showScr('admin');
+}
+function adminLogout(){sessionStorage.removeItem('admin_ok');backHome()}
+
+let RESET_SITE_ID = null;
+
+function openResetModal(id){
+  RESET_SITE_ID = id;
+  const s = SITES.find(x=>x.id===id); if(!s) return;
+  document.getElementById('reset-site-name').textContent = s.name;
+  // Build months grid — show only months that have data
+  const grid = document.getElementById('reset-months-grid');
+  grid.innerHTML = MONTHS.map((m,i)=>{
+    const hasData = s.conns.some(c=>c.v[i].pk||c.v[i].of||c.v[i].inv||c.v[i].ten||c.ev[i].ac||c.ev[i].dc||c.st[i].yi||c.sn[i].cr);
+    return `<button class="btn ${hasData?'btn-red':'btn-ghost'} btn-sm" style="justify-content:center;opacity:${hasData?1:0.4}" onclick="doReset(${i})">${m}</button>`;
+  }).join('');
+  document.getElementById('modal-reset').classList.add('on');
+}
+function closeResetModal(){
+  document.getElementById('modal-reset').classList.remove('on');
+  RESET_SITE_ID = null;
+}
+function doReset(type){
+  const id = RESET_SITE_ID;
+  const s = SITES.find(x=>x.id===id); if(!s) return;
+  const def = DEFAULT_SITES.find(x=>x.id===id); if(!def) return;
+  const idx = SITES.findIndex(x=>x.id===id);
+
+  if(type==='all'){
+    if(!confirm(`למחוק את כל נתוני "${s.name}"?`)) return;
+    SITES[idx] = {...def, uploaded:[], conns:def.conns.map(dc=>({...dc,
+      v:dc.v.map(()=>({pk:0,of:0,inv:null,ten:null,fee:null})),
+      st:dc.st.map(()=>({fo:0,fp:0,co:0,cp:0,yi:0,cc2:0})),
+      sn:dc.sn.map(()=>({bp:0,bo:0,fp:0,fo:0,cr:0})),
+      ev:dc.ev.map(()=>({ac:0,dc:0}))
+    }))};
+    toast('🗑️',`כל נתוני "${s.name}" אופסו`);
+  } else {
+    const mi = type; // month index
+    if(!confirm(`למחוק נתוני ${MONTHS[mi]} של "${s.name}"?`)) return;
+    SITES[idx].conns.forEach(c=>{
+      c.v[mi] = {pk:0,of:0,inv:null,ten:null,fee:null};
+      c.st[mi] = {fo:0,fp:0,co:0,cp:0,yi:0,cc2:0};
+      c.sn[mi] = {bp:0,bo:0,fp:0,fo:0,cr:0};
+      c.ev[mi] = {ac:0,dc:0};
+    });
+    SITES[idx].uploaded = SITES[idx].uploaded?.filter(u=>u.month!==mi)||[];
+    toast('🗑️',`נתוני ${MONTHS[mi]} של "${s.name}" אופסו`);
+  }
+  saveState();
+  closeResetModal();
+  showAdminHome();
+}
+
+function updateMonthlyFee(val){
+  const c=GC(); if(!c)return;
+  c.monthly_fee=parseFloat(val)||0;
+  admRc();
+}
+
+function updateEvShare(val){
+  const c=GC(); if(!c)return;
+  c.ev_share=parseFloat(val)||50;
+  admRc();
+}
+
+function updateOpex(val){
+  const c=GC(); if(!c)return;
+  c.opex=(parseFloat(val)||0)*12;
+  admRc();
+}
+
+function openAdmSite(id){
+  CUR_SITE=id; CUR_CONN=0;
+  const s=SITES.find(x=>x.id===id);
+  document.getElementById('adms-av').textContent=s.av;
+  document.getElementById('adms-av').style.background=s.col;
+  se('adms-name',s.name); se('adms-sub',s.sub); se('adms-sum-name',s.name);
+  const ct=document.getElementById('adm-ctabs');
+  if(s.conns.length>1){ct.style.display='flex';ct.innerHTML=s.conns.map((c,i)=>`<button class="ctab ${i===0?'active':''}" onclick="switchAdmConn(${i})">${s.connNames?s.connNames[i]:'חיבור '+(i+1)} — ${c.icp}</button>`).join('')}
+  else ct.style.display='none';
+  resetUZ('adm-uz','adm-uz-c'); document.getElementById('adm-ex').style.display='none';
+  // אינדיקטור חיבור פעיל
+  const ind=document.getElementById('adm-conn-indicator');
+  if(ind){
+    if(s.conns.length>1){
+      const name=s.connNames?s.connNames[0]:'חיבור 1';
+      ind.style.display='block';
+      ind.textContent='📌 מעלה ל: '+name+' ('+s.conns[0].icp+')';
+    } else {
+      ind.style.display='none';
+    }
+  }
+  // אתחול שדות
+  const feeInp = document.getElementById('adm-monthly-fee');
+  if(feeInp) feeInp.value = s.conns[CUR_CONN].monthly_fee||'';
+  const evInp = document.getElementById('adm-ev-share');
+  if(evInp) evInp.value = s.conns[CUR_CONN].ev_share??50;
+  const opexWrap = document.getElementById('adm-opex-wrap');
+  const opexInp = document.getElementById('adm-opex');
+  const hasSolar = s.conns[CUR_CONN].solar !== 'none';
+  if(opexWrap) opexWrap.style.display = hasSolar ? 'flex' : 'none';
+  if(opexInp) opexInp.value = s.conns[CUR_CONN].opex ? Math.round(s.conns[CUR_CONN].opex/12) : '';
+  renderAdmPanels(); admRc();
+  showScr('adm-site');
+}
+function switchAdmConn(i){
+  CUR_CONN=i;
+  document.querySelectorAll('#adm-ctabs .ctab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  const s=G(); const c=s?.conns[i];
+  // עדכן שדות לחיבור הנוכחי
+  const feeInp=document.getElementById('adm-monthly-fee');
+  if(feeInp) feeInp.value=c?.monthly_fee||'';
+  const evInp=document.getElementById('adm-ev-share');
+  if(evInp) evInp.value=c?.ev_share??50;
+  const opexWrap2=document.getElementById('adm-opex-wrap');
+  const opexInp2=document.getElementById('adm-opex');
+  if(opexWrap2) opexWrap2.style.display = c?.solar !== 'none' ? 'flex' : 'none';
+  if(opexInp2) opexInp2.value=c?.opex ? Math.round(c.opex/12) : '';
+  // הצג אינדיקטור חיבור פעיל
+  const ind=document.getElementById('adm-conn-indicator');
+  if(ind && s?.conns.length>1){
+    const name=s.connNames?s.connNames[i]:'חיבור '+(i+1);
+    ind.style.display='block';
+    ind.textContent='📌 מעלה ל: '+name+' ('+c?.icp+')';
+  }
+  renderAdmPanels();admRc();
+}
+
+function G(){return SITES.find(x=>x.id===CUR_SITE)}
+function GC(){return G()?.conns[CUR_CONN]}
+
+function renderAdmPanels(){
+  const c=GC(); const pc=document.getElementById('adm-panels'); if(!pc||!c)return;
+  pc.innerHTML=`
+  <div class="panel">
+    <div class="ph" onclick="tog('av')"><div class="phl"><div class="pico" style="background:rgba(0,230,118,0.1)">⚡</div><div><h3>יח"פ — ${c.icp}</h3><p>פסגה + שפל קוט"ש</p></div></div>
+    <div class="phr"><span class="pbadge" style="background:rgba(0,230,118,0.1);color:var(--green)" id="bg-av">₪0</span><span class="chev" id="ch-av">▼</span></div></div>
+    <div class="pb" id="pb-av"><div class="note">🔵 קלט מחשבון | 🟢 מחושב</div><div class="tw"><table class="mt">
+      <thead><tr><th>חודש</th><th>עונה</th><th class="thb">פסגה (קוט"ש)</th><th class="thb">שפל (קוט"ש)</th><th class="thb">חשבונית יח"פ (₪)</th><th class="thb">חשבון דיירים (₪)</th><th class="thb">עלות הפקה (₪)</th><th class="thg">חיסכון (₪)</th></tr></thead>
+      <tbody id="a-tbv"></tbody>
+      <tfoot><tr class="tot"><td class="mn" colspan="2">סה"כ</td><td id="a-tpk" class="mn">—</td><td id="a-tof" class="mn">—</td><td id="a-tinv" class="mn">—</td><td id="a-tten" class="mn">—</td><td id="a-tfee" class="mn">—</td><td id="a-tsv" class="pos">₪0</td></tr></tfoot>
+    </table></div></div>
+  </div>
+  <div class="panel">
+    <div class="ph" onclick="tog('amn')"><div class="phl"><div class="pico" style="background:rgba(255,152,0,0.1)">🔌</div><div><h3>מכירת מ"נ</h3><p>${c.kva} KVA · ${c.volt==='high'?'מ"ג':'מ"נ'}</p></div></div>
+    <div class="phr"><span class="pbadge" style="background:rgba(255,152,0,0.1);color:var(--orange)" id="bg-amn">₪0</span><span class="chev" id="ch-amn">▼</span></div></div>
+    <div class="pb" id="pb-amn"><div class="tw"><table class="mt">
+      <thead><tr><th>חודש</th><th>ימים</th><th class="thg">הכנסה מ"נ (₪)</th><th class="thg">רווח מ"נ (₪)</th></tr></thead>
+      <tbody id="a-tbmn"></tbody>
+      <tfoot><tr class="tot"><td class="mn" colspan="2">סה"כ</td><td id="a-tmr" class="calc">₪0</td><td id="a-tmp" class="pos">₪0</td></tr></tfoot>
+    </table></div></div>
+  </div>
+  ${c.solar==='tariff'?`<div class="panel">
+    <div class="ph" onclick="tog('asol')"><div class="phl"><div class="pico" style="background:rgba(255,213,79,0.1)">☀️</div><div><h3>סולארי — תעריפית</h3><p>ייצור + צריכה מייצור</p></div></div>
+    <div class="phr"><span class="pbadge" style="background:rgba(255,213,79,0.1);color:var(--gold)" id="bg-asol">₪0</span><span class="chev" id="ch-asol">▼</span></div></div>
+    <div class="pb" id="pb-asol"><div class="note">🔵 מחשבון ייצור חח"י + צריכה מייצור חח"י</div><div class="tw"><table class="mt">
+      <thead><tr><th>חודש</th><th class="thb">הזרמה שפל</th><th class="thb">הזרמה פסגה</th><th class="thb">צריכה מייצור שפל</th><th class="thb">צריכה מייצור פסגה</th><th class="thb">זיכוי ייצור (₪)</th><th class="thb">עלות צריכה (₪)</th><th class="thg">נטו (₪)</th></tr></thead>
+      <tbody id="a-tbsol"></tbody>
+      <tfoot><tr class="tot"><td class="mn" colspan="6">סה"כ</td><td id="a-tsn" class="pos">₪0</td></tr></tfoot>
+    </table></div></div>
+  </div>`:''}
+  ${c.solar==='net'?`<div class="panel">
+    <div class="ph" onclick="tog('asol')"><div class="phl"><div class="pico" style="background:rgba(255,213,79,0.1)">☀️</div><div><h3>סולארי — מונה נטו</h3><p>איזון + הזרמה + זיכוי</p></div></div>
+    <div class="phr"><span class="pbadge" style="background:rgba(255,213,79,0.1);color:var(--gold)" id="bg-asol">₪0</span><span class="chev" id="ch-asol">▼</span></div></div>
+    <div class="pb" id="pb-asol"><div class="note">🔵 מחשבון מונה נטו חח"י</div><div class="tw"><table class="mt">
+      <thead><tr><th>חודש</th><th class="thb">איזון פסגה</th><th class="thb">איזון שפל</th><th class="thb">הזרמה פסגה</th><th class="thb">הזרמה שפל</th><th class="thb">זיכוי (₪)</th><th class="thg">נטו (₪)</th></tr></thead>
+      <tbody id="a-tbsol"></tbody>
+      <tfoot><tr class="tot"><td class="mn" colspan="5">סה"כ</td><td id="a-tscr" class="pos">₪0</td><td id="a-tsn" class="pos">₪0</td></tr></tfoot>
+    </table></div></div>
+  </div>`:''}
+  <div class="panel">
+    <div class="ph" onclick="tog('aev')"><div class="phl"><div class="pico" style="background:rgba(179,136,255,0.1)">🔋</div><div><h3>עמדות טעינה EV</h3><p>רווח לאתר ללא מע"מ — AC + DC</p></div></div>
+    <div class="phr"><span class="pbadge" style="background:rgba(179,136,255,0.1);color:var(--purple)" id="bg-aev">₪0</span><span class="chev" id="ch-aev">▼</span></div></div>
+    <div class="pb" id="pb-aev"><div class="note">🔵 מדוח EV-Edge — רווח לאתר לאחר כל ניכויים</div><div class="tw"><table class="mt">
+      <thead><tr><th>חודש</th><th class="thb">רווח AC (₪)</th><th class="thb">רווח DC (₪)</th><th class="thg">סה"כ (₪)</th></tr></thead>
+      <tbody id="a-tbev"></tbody>
+      <tfoot><tr class="tot"><td class="mn">סה"כ</td><td id="a-tevac" class="mn">₪0</td><td id="a-tevdc" class="mn">₪0</td><td id="a-tev" class="pos">₪0</td></tr></tfoot>
+    </table></div></div>
+  </div>`;
+  buildAdmTables(c);
+}
+
+function buildAdmTables(c){
+  const tbv=document.getElementById('a-tbv'); if(tbv){tbv.innerHTML='';MONTHS.forEach((m,i)=>{const sc=SEA[i]==='קיץ'?'s-s':SEA[i]==='חורף'?'s-w':'s-m';const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${m}</td><td><span class="stag ${sc}">${SEA[i]}</span></td><td><input class="bi" type="number" id="a-vp${i}" value="${c.v[i].pk||''}" placeholder="0" oninput="uv(${i},'pk',this.value)"></td><td><input class="bi" type="number" id="a-vo${i}" value="${c.v[i].of||''}" placeholder="0" oninput="uv(${i},'of',this.value)"></td><td><input class="bi" type="number" id="a-vi${i}" value="${c.v[i].inv||''}" placeholder="חשבונית" oninput="uv(${i},'inv',this.value)"></td><td><input class="bi" type="number" id="a-vt${i}" value="${c.v[i].ten||''}" placeholder="דיירים" oninput="uv(${i},'ten',this.value)"></td><td><input class="bi" type="number" id="a-vf${i}" value="${c.v[i].fee||''}" placeholder="הפקה" oninput="uv(${i},'fee',this.value)"></td><td id="a-vsv${i}" class="pos">₪0</td>`;tbv.appendChild(tr)})}
+  const tbmn=document.getElementById('a-tbmn'); if(tbmn){tbmn.innerHTML='';MONTHS.forEach((m,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${m}</td><td class="mn">${DAYS[i]}</td><td class="calc" id="a-mr${i}">₪0</td><td id="a-mp${i}" class="pos">₪0</td>`;tbmn.appendChild(tr)})}
+  const tbsol=document.getElementById('a-tbsol');
+  if(tbsol&&c.solar==='tariff'){tbsol.innerHTML='';MONTHS.forEach((m,i)=>{const s=c.st[i];const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${m}</td><td><input class="bi" type="number" id="a-sfo${i}" value="${s.fo||''}" placeholder="0" oninput="ust(${i},'fo',this.value)"></td><td><input class="bi" type="number" id="a-sfp${i}" value="${s.fp||''}" placeholder="0" oninput="ust(${i},'fp',this.value)"></td><td><input class="bi" type="number" id="a-sco${i}" value="${s.co||''}" placeholder="0" oninput="ust(${i},'co',this.value)"></td><td><input class="bi" type="number" id="a-scp${i}" value="${s.cp||''}" placeholder="0" oninput="ust(${i},'cp',this.value)"></td><td><input class="bi" type="number" id="a-syi${i}" value="${s.yi||''}" placeholder="זיכוי ₪" oninput="ust(${i},'yi',this.value)"></td><td><input class="bi" type="number" id="a-scc${i}" value="${s.cc2||''}" placeholder="עלות ₪" oninput="ust(${i},'cc2',this.value)"></td><td id="a-sn${i}" class="pos">₪0</td>`;tbsol.appendChild(tr)})}
+  if(tbsol&&c.solar==='net'){tbsol.innerHTML='';MONTHS.forEach((m,i)=>{const s=c.sn[i];const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${m}</td><td><input class="bi" type="number" id="a-nbp${i}" value="${s.bp||''}" placeholder="0" oninput="usn(${i},'bp',this.value)"></td><td><input class="bi" type="number" id="a-nbo${i}" value="${s.bo||''}" placeholder="0" oninput="usn(${i},'bo',this.value)"></td><td><input class="bi" type="number" id="a-nfp${i}" value="${s.fp||''}" placeholder="0" oninput="usn(${i},'fp',this.value)"></td><td><input class="bi" type="number" id="a-nfo${i}" value="${s.fo||''}" placeholder="0" oninput="usn(${i},'fo',this.value)"></td><td><input class="bi" type="number" id="a-ncr${i}" value="${s.cr||''}" placeholder="זיכוי ₪" oninput="usn(${i},'cr',this.value)"></td><td id="a-sn${i}" class="pos">₪0</td>`;tbsol.appendChild(tr)})}
+  const tbev=document.getElementById('a-tbev'); if(tbev){tbev.innerHTML='';MONTHS.forEach((m,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${m}</td><td><input class="bi" type="number" id="a-evac${i}" value="${c.ev[i].ac||''}" placeholder="0" step="0.01" oninput="uev(${i},'ac',this.value)"></td><td><input class="bi" type="number" id="a-evdc${i}" value="${c.ev[i].dc||''}" placeholder="0" step="0.01" oninput="uev(${i},'dc',this.value)"></td><td id="a-evt${i}" class="pos">₪0</td>`;tbev.appendChild(tr)})}
+}
+function uv(i,fld,v){GC().v[i][fld]=v===''?null:parseFloat(v)||0;admRc()}
+function ust(i,fld,v){GC().st[i][fld]=parseFloat(v)||0;admRc()}
+function usn(i,fld,v){GC().sn[i][fld]=parseFloat(v)||0;admRc()}
+function uev(i,fld,v){GC().ev[i][fld]=parseFloat(v)||0;admRc()}
+
+function admRc(){
+  const s=G(); if(!s) return;
+  let tV=0,tM=0,tS=0,tEV=0; const ms=MONTHS.map(()=>({v:0,m:0,s:0,ev:0}));
+  s.conns.forEach((conn,ci)=>{
+    const cr=calcConn(conn); tV+=cr.tV;tM+=cr.tM;tS+=cr.tS;tEV+=cr.tEV;
+    cr.monthly.forEach(({i,save,save_alert,save_gap,mnP,solN,evN})=>{ms[i].v+=save;ms[i].m+=mnP;ms[i].s+=solN;ms[i].ev+=evN});
+    if(ci!==CUR_CONN) return;
+    const vmg=conn.kva*VMG, vmn=conn.kva*VMN;
+    let tpk=0,tof=0,tinv=0,tten=0,tfee=0,tsv=0,tmr=0,tmp=0,tsn=0,tscr=0,tevac=0,tevdc=0,tev=0;
+    cr.monthly.forEach(({i,save,save_alert,save_gap,mnP,solN,evN,iec_full})=>{
+      tpk+=conn.v[i].pk||0;tof+=conn.v[i].of||0;
+      if(conn.v[i].inv!=null)tinv+=conn.v[i].inv;if(conn.v[i].ten!=null)tten+=conn.v[i].ten;if(conn.v[i].fee!=null)tfee+=conn.v[i].fee;
+      tsv+=save;
+      const saveEl=document.getElementById('a-vsv'+i);
+      if(saveEl){
+        const alertHtml=save_alert?'🔴 ':(save_gap>0?'🟢 ':'');
+        const negTip=save<0?' <span title="עלויות קבועות (קיבולת+חלוקה) גבוהות מהחיסכון — תוצאה שלילית תקינה" style="cursor:help;font-size:10px;color:var(--text3)">ⓘ</span>':'';
+        saveEl.innerHTML=alertHtml+f(save)+negTip; saveEl.className=save>=0?'pos':'neg';
+      }
+      const ten=conn.v[i].ten||0;
+      const mr=ten>0?ten:0;
+      tmr+=mr;tmp+=mnP;
+      se('a-mr'+i,mr>0?f(mr):'—'); seCls('a-mp'+i,f(mnP),mnP>=0?'pos':'neg');
+      if(conn.solar!=='none'){tsn+=solN;seCls('a-sn'+i,f(solN),solN>=0?'pos':'neg');if(conn.solar==='net'){tscr+=conn.sn[i].cr||0}}
+      const et=(conn.ev[i].ac||0)+(conn.ev[i].dc||0);tevac+=conn.ev[i].ac||0;tevdc+=conn.ev[i].dc||0;tev+=et;se('a-evt'+i,f(et));
+    });
+    se('a-tpk',tpk?Math.round(tpk).toLocaleString():'—');se('a-tof',tof?Math.round(tof).toLocaleString():'—');
+    se('a-tinv',tinv?f(tinv):'—');se('a-tten',tten?f(tten):'—');se('a-tfee',tfee?f(tfee):'—');
+    seCls('a-tsv',f(tsv),tsv>=0?'pos':'neg');se('a-tmr',f(tmr));seCls('a-tmp',f(tmp),tmp>=0?'pos':'neg');
+    if(document.getElementById('a-tsn'))seCls('a-tsn',f(tsn),tsn>=0?'pos':'neg');
+    if(document.getElementById('a-tscr'))se('a-tscr',f(tscr));
+    se('a-tevac',f(tevac));se('a-tevdc',f(tevdc));seCls('a-tev',f(tev),tev>=0?'pos':'neg');
+    se('bg-av',f(cr.tV));se('bg-amn',f(cr.tM));if(document.getElementById('bg-asol'))se('bg-asol',f(cr.tS));se('bg-aev',f(cr.tEV));
+  });
+  const g=tV+tM+tS+tEV;
+  se('adms-grand',f(g)); se('adms-avg','ממוצע חודשי '+f(g/12));
+  se('adms-v',f(tV));se('adms-m',f(tM));se('adms-s',f(tS));se('adms-ev',f(tEV));
+  const tb=document.getElementById('adms-tb'); tb.innerHTML='';
+  let sv=0,sm=0,ss=0,sev=0;
+  ms.forEach((m,i)=>{const tot=m.v+m.m+m.s+m.ev;sv+=m.v;sm+=m.m;ss+=m.s;sev+=m.ev;
+    const tr=document.createElement('tr');tr.innerHTML=`<td class="mn">${MONTHS[i]}</td><td class="${m.v>=0?'pos':'neg'}">${f(m.v)}</td><td class="${m.m>=0?'pos':'neg'}">${f(m.m)}</td><td class="${m.s>=0?'pos':'neg'}">${f(m.s)}</td><td class="${m.ev>=0?'pos':'neg'}">${f(m.ev)}</td><td class="${tot>=0?'pos':'neg'}" style="font-weight:700">${f(tot)}</td>`;tb.appendChild(tr)});
+  se('adms-tv',f(sv));se('adms-tm',f(sm));se('adms-ts',f(ss));se('adms-tev',f(sev));seCls('adms-tt',f(g),g>=0?'pos':'neg');
+  const tt=Math.abs(tV)+Math.abs(tM)+Math.abs(tS)+Math.abs(tEV)||1;
+  document.getElementById('adms-bar').innerHTML=`<div style="flex:${Math.abs(tV)/tt};background:rgba(0,230,118,0.6)"></div><div style="flex:${Math.abs(tM)/tt};background:rgba(255,152,0,0.6)"></div><div style="flex:${Math.abs(tS)/tt};background:rgba(255,213,79,0.6)"></div><div style="flex:${Math.abs(tEV)/tt};background:rgba(179,136,255,0.6)"></div>`;
+}
+function saveAdmSite(){saveState();toast('💾','נשמר');showAdminHome()}
+
+// ══════════════════════════════════════════════
+// AI UPLOAD
+// ══════════════════════════════════════════════
+function handleAdmDrop(e){e.preventDefault();document.getElementById('adm-uz').classList.remove('drag');procFile(e.dataTransfer.files[0],'adm')}
+function handleAdmFile(e){procFile(e.target.files[0],'adm');e.target.value=''}
+
+async function procFile(file,mode,hint){
+  if(!file)return;
+  // Determine correct UZ element based on hint and mode
+  let uzId,ucId;
+  if(mode==='mgr'){
+    if(hint==='company'){uzId='mgr-uz-co';ucId='mgr-uz-co-c';}
+    else if(hint==='solar'){uzId='mgr-uz-sol';ucId='mgr-uz-sol-c';}
+    else if(hint==='ev'){uzId='mgr-uz-ev';ucId='mgr-uz-ev-c';}
+    else{uzId='mgr-uz';ucId='mgr-uz-c';}
+  } else {
+    uzId='adm-uz';ucId='adm-uz-c';
+  }
+  const uz=document.getElementById(uzId);
+  uz.classList.add('proc');
+  document.getElementById(ucId).innerHTML=`<div class="spin"></div><h3>AI מנתח...</h3><p>מזהה סוג חשבון ומחלץ נתונים</p>`;
+  const s=SITES.find(x=>x.id===CUR_SITE); const c=s?.conns[CUR_CONN];
+  const isExcel=file.name.match(/\.xlsx?$/i);
+  try{
+    const mc=[];
+
+    if(isExcel){
+      // Excel מועלה — זה תמיד דוח דיירים (לא יח"פ)
+      if(hint==='icp'){
+        // יח"פ מקבל רק PDF — הצג הודעה
+        uz.classList.remove('proc');
+        document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:6px">⚠️</div><h3>יש להעלות PDF</h3><p>חשבון יח"פ הוא PDF. לדוח דיירים השתמש בטאב 🏠 דיירים</p>`;
+        return;
+      }
+      
+      // Load SheetJS
+      if(!window.XLSX){
+        await new Promise((resolve,reject)=>{
+          const s=document.createElement('script');
+          s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+          s.onload=resolve; s.onerror=reject;
+          document.head.appendChild(s);
+        });
+      }
+      const ab = await file.arrayBuffer();
+      const wb = XLSX.read(ab, {type:'array', cellDates:true});
+
+      // מצא את הגיליון העדכני ביותר שיש בו נתוני דיירים בפועל
+      let bestSheet = wb.SheetNames[0];
+      let bestScore = -1;
+      wb.SheetNames.forEach(name=>{
+        const m = name.match(/^(\d{1,2})[.\-_]?(\d{2})(\s*\(\d+\))?$/) || name.match(/^(\d{2})(\d{2})(\s*\(\d+\))?$/);
+        if(m){
+          const mm=parseInt(m[1]), yy=parseInt(m[2]);
+          const revision = m[3] ? parseInt(m[3].replace(/\D/g,'')) : 0;
+          if(mm>=1&&mm<=12&&yy>=20&&yy<=99){
+            // בדוק אם יש נתונים בגיליון הזה
+            const ws2 = wb.Sheets[name];
+            const rows2 = XLSX.utils.sheet_to_json(ws2, {header:1, defval:null});
+            const hasData = rows2.some(row=>row&&row.some(cell=>typeof cell==='number'&&cell>1000));
+            if(hasData){
+              const score = yy*12*100 + mm*100 + revision;
+              if(score>bestScore){bestScore=score;bestSheet=name;}
+            }
+          }
+        }
+      });
+      const ws = wb.Sheets[bestSheet];
+      const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+      
+      // זיהוי אוטומטי של סוג דוח
+      let monthIndex = null;
+      let year = null;
+
+      // חיפוש חודש משם הגיליון הנבחר — תומך ב: "1.26", "0126", "1.26 (2)"
+      const sheetMatch = bestSheet.match(/^(\d{1,2})[.\-_]?(\d{2})(\s*\(\d+\))?$/) || bestSheet.match(/^(\d{2})(\d{2})(\s*\(\d+\))?$/);
+      if(sheetMatch){
+        const mm=parseInt(sheetMatch[1]), yy=parseInt(sheetMatch[2]);
+        if(mm>=1&&mm<=12&&yy>=20&&yy<=99){ monthIndex=mm-1; year=2000+yy; }
+      }
+      // חיפוש חודש משם הקובץ — תומך בפורמטים: 01_26, 0126, 01-26, ינואר, january
+      if(monthIndex===null){
+        const fname = file.name;
+        // פורמט מספרי: 01_26 או 01-26 או 0126
+        const fnumMatch = fname.match(/[_\-]?(\d{2})[_\-](\d{2})(?:\D|$)/);
+        if(fnumMatch){
+          const mm=parseInt(fnumMatch[1]), yy=parseInt(fnumMatch[2]);
+          if(mm>=1&&mm<=12&&yy>=20&&yy<=99){ monthIndex=mm-1; year=2000+yy; }
+        }
+        // פורמט טקסט עברי/אנגלי
+        if(monthIndex===null){
+          const fnameMonths=[['jan','ינואר'],['feb','פברואר'],['mar','מרץ'],['apr','אפריל'],['may','מאי'],['jun','יוני'],['jul','יולי'],['aug','אוגוסט'],['sep','ספטמבר'],['oct','אוקטובר'],['nov','נובמבר'],['dec','דצמבר']];
+          fnameMonths.forEach(([en,he],idx)=>{
+            if(fname.toLowerCase().includes(en)||fname.includes(he)) monthIndex=idx;
+          });
+          const yearMatch=fname.match(/20(\d{2})/);
+          if(yearMatch) year=2000+parseInt(yearMatch[1]);
+        }
+      }
+      
+      // ══ זיהוי דוח EV קודם! ══
+      let evProfit = null;
+      let evMonthIndex = null;
+      let evYear = null;
+      for(let i=0; i<rows.length; i++){
+        const row = rows[i];
+        const rowStr = row.map(c=>String(c||'')).join(' ');
+        if(evMonthIndex===null && row[0] && String(row[0]).includes('חודש')){
+          const v=parseFloat(row[1]); if(!isNaN(v)&&v>=1&&v<=12) evMonthIndex=v-1;
+        }
+        if(evYear===null && row[0] && String(row[0]).includes('שנה')){
+          const v=parseFloat(row[1]); if(!isNaN(v)&&v>2000) evYear=v;
+        }
+        // פורמט 1: EV-Edge — "רווח לאתר" — חשב חזרה לסכום מלא לפני %
+        if(evProfit===null && rowStr.includes('רווח לאתר') && !rowStr.includes('%')){
+          const v=row[1];
+          if(typeof v==='number'&&v>0){
+            const share=(c?.ev_share||50)/100;
+            evProfit = v/share; // חזרה לסכום מלא
+          }
+        }
+        // פורמט 2: המלאכה — "סכום כולל" col5 — כבר חלק הנכס, חשב חזרה
+        if(evProfit===null && row[0] && String(row[0]).includes('סכום כולל')){
+          const v=row[5];
+          if(typeof v==='number'&&v>0){
+            const share=(c?.ev_share||50)/100;
+            evProfit = v/share;
+          }
+        }
+        // פורמט 3: המלאכה — "סכום חשבונית לקבל לפני מעמ" col5
+        if(evProfit===null && rowStr.includes('סכום חשבונית לקבל') && rowStr.includes('לפני מעמ')){
+          const v=row[5];
+          if(typeof v==='number'&&v>0){
+            const share=(c?.ev_share||50)/100;
+            evProfit = v/share;
+          }
+        }
+      }
+      if(evProfit!==null){
+        const ex={bill_type:'ev',month_index:evMonthIndex!==null?evMonthIndex:(monthIndex??new Date().getMonth()),year:evYear??year??new Date().getFullYear(),ev_ac_profit:evProfit,ev_dc_profit:0};
+        applyEx(ex,mode); uz.classList.remove('proc');uz.classList.add('done');
+        document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:6px">✅</div><h3>🔋 EV — חולץ!</h3><p>${MONTHS[ex.month_index]||''} ${ex.year||''}</p>`;
+        toast('✅','דוח EV עובד בהצלחה'); return;
+      }
+
+      // ══ דוח דיירים — חילוץ ישיר בקוד, ללא AI ══
+      const curYear = new Date().getFullYear()-2000;
+      const allSheetData = [];
+      wb.SheetNames.forEach(sheetName=>{
+        // פורמטים נתמכים: 01.26, 1.26, 0126, 01.2026, 1.2026
+        const sm = sheetName.match(/^(\d{1,2})[.\-_](\d{4})(\s*\((\d+)\))?$/) // MM.YYYY
+                || sheetName.match(/^(\d{1,2})[.\-_]?(\d{2})(\s*\((\d+)\))?$/) // MM.YY
+                || sheetName.match(/^(\d{2})(\d{2})(\s*\((\d+)\))?$/);         // MMYY
+        if(!sm) return;
+        const smm=parseInt(sm[1]);
+        // תמיכה בשנה 2 או 4 ספרות
+        const rawYear=parseInt(sm[2]);
+        const syy = rawYear>100 ? rawYear-2000 : rawYear;
+        const ver=parseInt(sm[4]||'0')||0;
+        if(smm<1||smm>12||syy<20||syy>99||syy!==curYear) return;
+        const wsTemp=wb.Sheets[sheetName];
+        const rowsTemp=XLSX.utils.sheet_to_json(wsTemp,{header:1,defval:null});
+        const hasData=rowsTemp.some(r=>r&&r.some(v=>typeof v==='number'&&v>1000));
+        if(hasData) allSheetData.push({name:sheetName,mm:smm,yy:syy,ver,rows:rowsTemp});
+      });
+      // לכל חודש — קח רק את הגרסה האחרונה
+      const latestByMonth={};
+      allSheetData.forEach(sheet=>{
+        const key=`${sheet.mm}_${sheet.yy}`;
+        if(!latestByMonth[key]||sheet.ver>latestByMonth[key].ver) latestByMonth[key]=sheet;
+      });
+
+      if(Object.keys(latestByMonth).length>0){
+        const results=[];
+        Object.values(latestByMonth).sort((a,b)=>a.mm-b.mm).forEach(({mm,yy,rows})=>{
+          let tenantBill=null;
+
+          // פורמט 1 (גלרון/נתיבות): עמודת "תשלום ללא מע"מ + חיובים קבועים", שורת "סה"כ" בעמודה 1
+          let colIdx=null;
+          for(let ri=0;ri<Math.min(15,rows.length);ri++){
+            const row=rows[ri]; if(!row) continue;
+            for(let ci=0;ci<row.length;ci++){
+              const cell=row[ci];
+              if(cell&&typeof cell==='string'&&cell.includes('תשלום')&&cell.includes('מע')&&(cell.includes('חיובים')||cell.includes('קבועים'))){
+                colIdx=ci; break;
+              }
+            }
+            if(colIdx!==null) break;
+          }
+          if(colIdx!==null){
+            for(let ri=0;ri<rows.length;ri++){
+              const row=rows[ri]; if(!row) continue;
+              const cell1=row[1];
+              if(cell1&&typeof cell1==='string'&&(cell1.includes('סה"כ')||cell1.includes('סה\'\'כ'))){
+                const val=row[colIdx];
+                if(typeof val==='number'&&val>0){tenantBill=Math.round(val);break;}
+              }
+            }
+          }
+
+          // פורמט 2 (QLC/סוהו): שורת "סה"כ דיירים" — קח את האחרונה (הכוללת)
+          if(!tenantBill){
+            let lastRow=null;
+            for(let ri=0;ri<rows.length;ri++){
+              const row=rows[ri]; if(!row) continue;
+              const rowStr=row.map(c=>c!=null?String(c):'').join(' ');
+              if(rowStr.includes('סה"כ')&&rowStr.includes('דיירים')) lastRow=row;
+            }
+            if(lastRow){
+              // מצא את עמודת סה"כ ש"ח לפי כותרת
+              let totalCol=11;
+              for(let ri=0;ri<rows.length;ri++){
+                const row=rows[ri]; if(!row) continue;
+                for(let ci=0;ci<row.length;ci++){
+                  const c=row[ci];
+                  if(c&&typeof c==='string'&&(c.includes('סה"כ ש"ח')||c.includes('סה"כ לתשלום'))){totalCol=ci;break;}
+                }
+              }
+              const val=lastRow[totalCol];
+              if(typeof val==='number'&&val>0) tenantBill=Math.round(val);
+            }
+          }
+
+          // פורמט 3 (QLC/גן יבנה/עפולה): שורת "סה"כ אתר" בכל עמודה
+          if(!tenantBill){
+            for(let ri=0;ri<rows.length;ri++){
+              const row=rows[ri]; if(!row) continue;
+              const rowStr=row.map(c=>c!=null?String(c):'').join(' ');
+              if(rowStr.includes('סה"כ')&&rowStr.includes('אתר')&&!rowStr.includes('צריכה')&&!rowStr.includes('הפרש')&&!rowStr.includes('חשמל')){
+                // מצא עמודת כותרת "סה"כ תשלום ללא מע"מ" או קח עמודה עם ערך מתאים
+                let totalCol=null;
+                for(let hri=Math.max(0,ri-30);hri<ri;hri++){
+                  const hrow=rows[hri]; if(!hrow) continue;
+                  for(let ci=0;ci<hrow.length;ci++){
+                    const c=hrow[ci];
+                    if(c&&typeof c==='string'&&c.includes('תשלום')&&c.includes('מע"מ')&&!c.includes('חיובים')&&!c.includes('קבועים')){totalCol=ci;break;}
+                  }
+                  if(totalCol!==null) break;
+                }
+                const val=totalCol!==null?row[totalCol]:null;
+                if(typeof val==='number'&&val>0){tenantBill=Math.round(val);break;}
+                // פולבק — עמודה 11 או 13
+                const v2=row[11]||row[13];
+                if(typeof v2==='number'&&v2>0){tenantBill=Math.round(v2);break;}
+              }
+            }
+          }
+          // פורמט 4 (eXpertPower/West Design): שורת "סה"כ" בעמודה 0, קח עמודת "סה"כ לתשלום"
+          if(!tenantBill){
+            // מצא עמודת "סה"כ לתשלום" בשורות הכותרות
+            let totalCol=null;
+            for(let ri=0;ri<rows.length;ri++){
+              const row=rows[ri]; if(!row) continue;
+              for(let ci=0;ci<row.length;ci++){
+                const c=row[ci];
+                if(c&&typeof c==='string'&&c.includes('סה"כ לתשלום')){totalCol=ci;break;}
+              }
+              if(totalCol!==null) break;
+            }
+            if(totalCol!==null){
+              for(let ri=0;ri<rows.length;ri++){
+                const row=rows[ri]; if(!row) continue;
+                const cell0=row[0];
+                if(cell0&&typeof cell0==='string'&&cell0.trim()==='סה"כ'){
+                  const val=row[totalCol];
+                  if(typeof val==='number'&&val>0){tenantBill=Math.round(val);break;}
+                }
+              }
+            }
+          }
+          if(tenantBill){
+            results.push({
+              bill_type:'icp',
+              month_index: mm-1,
+              year: 2000+yy,
+              tenant_bill: tenantBill
+            });
+          }
+        });
+
+        if(results.length>0){
+          results.forEach(ex=>applyEx({...ex,_hint:'company'},mode));
+          uz.classList.remove('proc');uz.classList.add('done');
+          const label=results.map(r=>MONTHS[r.month_index]).join(', ');
+          document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:6px">✅</div><h3>🏢 חברת מניה — חולץ!</h3><p>${label} ${results[0].year}</p>`;
+          toast('✅',`${results.length>1?results.length+' חודשים':'חברת מניה'} עובד בהצלחה`);
+          return; // לא שולחים ל-AI
+        }
+      }
+      // fallback — שלח ל-AI אם לא הצלחנו לחלץ ישירות
+      const excelText=await readExcelAsText(file);
+      mc.push({type:'text',text:`דוח דיירים עבור "${s?.name}":\n\n${excelText}\n\n`});
+    } else {
+      const b64=await toB64(file);
+      if(file.type==='application/pdf') mc.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}});
+      else if(file.type.startsWith('image/')) mc.push({type:'image',source:{type:'base64',media_type:file.type,data:b64}});
+    }
+
+    const effectiveHint = hint || 'icp';
+    
+    const hintText = effectiveHint==='ev' ? '\nזהו דוח EV-Edge — bill_type חייב להיות "ev".' :
+                     effectiveHint==='solar' && c?.solar==='tariff' ? '\nזהו חשבון סולארי תעריפי (חח"י). bill_type חייב להיות "solar_yield".\n\nהחשבון עשוי להכיל שני מסמכים: חשבון צריכה ומלצת חשבון (זיכוי).\nחלץ מהמלצת החשבון (המסמך עם הזיכוי/הסכום השלילי):\n- solar_yield_income = סכום הזיכוי בגין ייצור (קח את הערך החיובי, גם אם מופיע כשלילי בחשבון)\n- אל תחלץ מחשבון הצריכה הרגיל' :
+                     effectiveHint==='solar' ? '\nזהו חשבון סולארי מונה נטו (חח"י) — bill_type חייב להיות "solar_net". חלץ: net_balance_peak/off=קוט"ש ייצור, net_feed_peak/off=קוט"ש הזרמה, net_credit=זיכוי תעריף הגנה בשקלים.' :
+                     effectiveHint==='company' && isExcel ? '\nזהו דוח חיובי חשמל של דיירים. bill_type="company".\n\nאני צריך את הסכום שכל הדיירים משלמים ביחד לנכס — כולל אנרגיה + קיבולת + חלוקה + אספקה, ללא מע"מ.\n\nהסכום הזה נקרא לפעמים: "סה"כ לחיוב", "סה"כ כולל קיבולת", "סה"כ דיירים", "total".\nהוא תמיד כולל את רכיב הקיבולת — לא רק אנרגיה.\nשמור כ-tenant_bill.\n\nאם יש מספר חודשים — החזר מערך JSON.' :
+                     effectiveHint==='company' ? '\nזהו חשבון חברת מניה (QLC / גלרון / סייטק). bill_type חייב להיות "company" — לא "icp"!\nחלץ רק: tenant_bill = סה"כ תשלום הדיירים ללא מע"מ.' :
+                     effectiveHint==='icp' ? '\nזהו חשבון יח"פ (ספק וירטואלי). bill_type="icp".\n\nחלץ:\n- peak_kwh = **סה"כ קוט"ש פסגה** — הסכום הכולל של כל הצריכה בפסגה. מופיע בטבלת הצריכה כ"סה"כ" בשורת פסגה. **לא** לקחת צריכה שיא למונה בודד!\n- off_kwh = **סה"כ קוט"ש שפל** — הסכום הכולל של כל הצריכה בשפל. **לא** לקחת צריכה שיא למונה בודד!\n- total_no_vat = **סה"כ חייב במע"מ** — הסכום אחרי הנחה ולפני מע"מ. מופיע כ"סה"כ חייב במע"מ". **לא** "חיוב בגין צריכה"!\n- invoice_fee = עמלת הפקה (₪40-₪200, אם קיים)' : '';
+    mc.push({type:'text',text:`זהו חשבון חשמל / דוח עבור "${s?.name}". יח"פ: ${c?.icp}, חברת מניה: ${c?.co}, אסדרה: ${c?.solar}.${hintText}
+
+סוגי חשבונות:
+- "icp" = חשבון יח"פ — פסגה/שפל קוט"ש, total_no_vat=סה"כ חייב במע"מ (אחרי הנחה), invoice_fee=עלות הפקת חשבון (סכום קטן כמו ₪40-₪200). **אל תחלץ tenant_bill מחשבון יח"פ.**
+- "company" = חברת מניה (QLC/גלרון/סייטק) — total_no_vat בלבד
+- "solar_yield" = ייצור חח"י — solar_yield_income=זיכוי ₪
+- "solar_consume" = צריכה מייצור — solar_consume_cost=עלות ₪
+- "solar_net" = מונה נטו (חשבון חח"י) — חלץ:
+  net_balance_off=קוט"ש_ייצור_שפל, net_balance_peak=קוט"ש_ייצור_פסגה,
+  net_feed_off=קוט"ש_הזרמה_לרשת_שפל, net_feed_peak=קוט"ש_הזרמה_לרשת_פסגה,
+  net_credit=תעריף_הגנה_נטו_בשקלים (הסכום הכספי של זיכוי תעריף הגנה, לא הקוט"ש!)
+- "ev" = דוח EV-Edge — ev_ac_profit=רווח AC לאתר ללא מע"מ **אחרי** חלוקת אחוז שיתוף, ev_dc_profit=רווח DC לאתר ללא מע"מ **אחרי** חלוקת אחוז שיתוף. אם הדוח מציג "חלוקת רווחים X%" — קח רק את חלק האתר.
+
+חשוב: month_index: ינואר=0 ... דצמבר=11. invoice_fee = עלות הפקת חשבון/עמלת ספק (לא מע"מ).
+
+דוח דיירים — הקשר עסקי:
+אתה מנהל נכס חשמל. הקובץ מכיל דוח Excel עם חיובי חשמל חודשיים לדיירים.
+
+המשימה הקריטית — חילוץ tenant_bill:
+1. חפש שורת סיכום בתחתית הגיליון — שורות עם מילים: "סה\"כ", "כולל", "Total", "Sum", "סכום כולל"
+2. שורת הסיכום כוללת: אנרגיה + קיבולת + חלוקה + אספקה לכל הדיירים יחד
+3. אל תיקח: סכומי ביניים לשנאי בודד, לקומה, לאגף — רק הסיכום הגלובלי
+4. אם יש כמה שורות "סה\"כ" — קח את הגדולה / האחרונה (היא הכוללת)
+5. אם אין שורת סיכום — חבר את כל ערכי הדיירים בעמודות הרלוונטיות
+6. הערך חייב להיות ללא מע"מ (17%)
+
+אם יש מספר גיליונות (חודשים) — חלץ לכל חודש בנפרד.
+החזר מערך: [{"bill_type":"icp","month_index":0,"year":2026,"tenant_bill":76839},...]
+אם חודש אחד — החזר אובייקט בודד.
+
+החזר JSON בלבד:
+{"bill_type":"icp"|"company"|"solar_yield"|"solar_consume"|"solar_net"|"ev",
+"month_index":0-11,"year":שנה,
+"peak_kwh":פסגה_קוטש,"off_kwh":שפל_קוטש,
+"total_no_vat":סכום_ללא_מעמ,"tenant_bill":חשבון_דיירים,"invoice_fee":עלות_הפקה,
+"solar_feed_off":הזרמה_שפל,"solar_feed_peak":הזרמה_פסגה,
+"solar_consume_off":צריכה_שפל,"solar_consume_peak":צריכה_פסגה,
+"solar_yield_income":זיכוי_ייצור,"solar_consume_cost":עלות_צריכה,
+"net_balance_peak":איזון_פסגה,"net_balance_off":איזון_שפל,
+"net_feed_peak":הזרמה_פסגה,"net_feed_off":הזרמה_שפל,"net_credit":זיכוי_נטו,
+"ev_ac_profit":רווח_AC_ללא_מעמ,"ev_dc_profit":רווח_DC_ללא_מעמ}
+null לשדות חסרים.`});
+
+    const apiKey = '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';
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:mc}]})});
+    const data=await resp.json();
+    if(!data.content) throw new Error('שגיאת API: '+(data.error?.message||JSON.stringify(data)));
+    const txt=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    if(!txt) throw new Error('AI לא החזיר תשובה');
+    const parsed=JSON.parse(txt);
+    // תמיכה במערך (מספר חודשים) או אובייקט בודד
+    const exList=Array.isArray(parsed)?parsed:[parsed];
+    exList.forEach(ex=>applyEx({...ex, _hint: effectiveHint}, mode));
+    const ex=exList[0];
+    uz.classList.remove('proc');uz.classList.add('done');
+    const TL={'icp':'⚡ יח"פ','company':'🏢 חברת מניה','solar_yield':'☀️ ייצור','solar_consume':'☀️ צריכה מייצור','solar_net':'☀️ מונה נטו','ev':'🔋 EV'};
+    const monthsLabel=exList.map(e=>MONTHS[e.month_index]||'').join(', ');
+    document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:6px">✅</div><h3>${TL[ex.bill_type]||'חשבון'} — חולץ!</h3><p>${monthsLabel} ${ex.year||''}</p>`;
+    toast('✅',`${exList.length>1?exList.length+' חודשים':TL[ex.bill_type]||'חשבון'} עובד בהצלחה`);
+  }catch(e){uz.classList.remove('proc');document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:6px">⚠️</div><h3>שגיאה</h3><p>${e.message}</p>`;toast('⚠️','שגיאה בחילוץ')}
+}
+
+async function readExcelAsText(file){
+  // Load SheetJS dynamically
+  if(!window.XLSX){
+    await new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload=resolve; s.onerror=reject;
+      document.head.appendChild(s);
+    });
+  }
+  const ab = await file.arrayBuffer();
+  const wb = XLSX.read(ab, {type:'array'});
+  let text = '';
+  wb.SheetNames.forEach(name=>{
+    const ws = wb.Sheets[name];
+    const csv = XLSX.utils.sheet_to_csv(ws);
+    if(csv.replace(/,/g,'').trim()){
+      text += `\n=== גיליון: ${name} ===\n${csv}\n`;
+    }
+  });
+  return text.slice(0, 8000); // Limit to avoid token overflow
+}
+
+function applyEx(ex,mode){
+  const s=SITES.find(x=>x.id===CUR_SITE); const c=s?.conns[CUR_CONN]; if(!c)return;
+  const mi=ex.month_index; const now=new Date();
+  const exbId=mode==='mgr'?'mgr-ex':'adm-ex', exfId=mode==='mgr'?'mgr-exf':'adm-exf';
+  document.getElementById(exbId).style.display='block';
+
+  // Build display fields based on type
+  const typeLabel={'icp':'⚡ יח"פ','company':'🏢 חברת מניה','solar_yield':'☀️ ייצור','solar_consume':'☀️ צריכה','solar_net':'☀️ מונה נטו','ev':'🔋 EV'};
+  let fields=[];
+  fields.push({l:'סוג',v:typeLabel[ex.bill_type]||ex.bill_type||'-'});
+  fields.push({l:'חודש',v:mi!=null?MONTHS[mi]+' '+(ex.year||''):'-'});
+  if(ex.bill_type==='icp'){
+    fields.push({l:'פסגה קוט"ש',v:ex.peak_kwh??'-'});
+    fields.push({l:'שפל קוט"ש',v:ex.off_kwh??'-'});
+    fields.push({l:'חשבון ללא מע"מ',v:ex.total_no_vat?f(ex.total_no_vat):'-'});
+    fields.push({l:'חשבון דיירים',v:ex.tenant_bill?f(ex.tenant_bill):'-'});
+    if(ex.invoice_fee) fields.push({l:'עלות הפקה (מנוכה)',v:f(ex.invoice_fee),neg:true});
+  } else if(ex.bill_type==='company'){
+    fields.push({l:'סכום ללא מע"מ',v:ex.total_no_vat?f(ex.total_no_vat):'-'});
+  } else if(ex.bill_type==='solar_yield'){
+    fields.push({l:'זיכוי ייצור',v:ex.solar_yield_income?f(ex.solar_yield_income):'-'});
+    if(c.opex) fields.push({l:'עלות תפעול (מנוכה)',v:f(c.opex/12),neg:true});
+  } else if(ex.bill_type==='solar_net'){
+    fields.push({l:'זיכוי נטו',v:ex.net_credit?f(ex.net_credit):'-'});
+    if(c.opex) fields.push({l:'עלות תפעול (מנוכה)',v:f(c.opex/12),neg:true});
+  } else if(ex.bill_type==='ev'){
+    fields.push({l:'רווח AC',v:ex.ev_ac_profit?f(ex.ev_ac_profit):'-'});
+    fields.push({l:'רווח DC',v:ex.ev_dc_profit?f(ex.ev_dc_profit):'-'});
+    fields.push({l:'סה"כ EV',v:(ex.ev_ac_profit||ex.ev_dc_profit)?f((ex.ev_ac_profit||0)+(ex.ev_dc_profit||0)):'-'});
+  }
+  document.getElementById(exfId).innerHTML=fields.map(x=>`<div class="ef"><div class="efl">${x.l}</div><div class="efv" style="${x.neg?'color:var(--red)':''}">${x.v}</div></div>`).join('');
+
+  if(mi!=null&&mi>=0&&mi<12){
+    // חברת מניה — שומר רק tenant_bill בכל מקרה
+    if(ex.bill_type==='company' || ex._hint==='company'){
+      const tb = ex.tenant_bill ?? ex.total_no_vat ?? null;
+      if(tb!=null) c.v[mi].ten=tb;
+    } else if(ex.bill_type==='icp'){
+      if(ex.peak_kwh!=null)c.v[mi].pk=ex.peak_kwh;
+      if(ex.off_kwh!=null)c.v[mi].of=ex.off_kwh;
+      if(ex.total_no_vat!=null)c.v[mi].inv=ex.total_no_vat;
+      if(ex.invoice_fee!=null)c.v[mi].fee=ex.invoice_fee;
+      // tenant_bill לא נלקח מחשבון יח"פ — רק מאקסל חברת מניה
+    }
+    if(ex.bill_type==='solar_yield'){
+      if(ex.solar_yield_income!=null)c.st[mi].yi=ex.solar_yield_income;
+      if(ex.solar_feed_off!=null)c.st[mi].fo=ex.solar_feed_off;
+      if(ex.solar_feed_peak!=null)c.st[mi].fp=ex.solar_feed_peak;
+    }
+    if(ex.bill_type==='solar_consume'){
+      if(ex.solar_consume_off!=null)c.st[mi].co=ex.solar_consume_off;
+      if(ex.solar_consume_peak!=null)c.st[mi].cp=ex.solar_consume_peak;
+      if(ex.solar_consume_cost!=null)c.st[mi].cc2=ex.solar_consume_cost;
+    }
+    if(ex.bill_type==='solar_net'){
+      if(ex.net_balance_peak!=null)c.sn[mi].bp=ex.net_balance_peak;
+      if(ex.net_balance_off!=null)c.sn[mi].bo=ex.net_balance_off;
+      if(ex.net_feed_peak!=null)c.sn[mi].fp=ex.net_feed_peak;
+      if(ex.net_feed_off!=null)c.sn[mi].fo=ex.net_feed_off;
+      if(ex.net_credit!=null)c.sn[mi].cr=ex.net_credit;
+    }
+    if(ex.bill_type==='ev'){
+      c.ev[mi].ac=ex.ev_ac_profit||0;
+      c.ev[mi].dc=ex.ev_dc_profit||0;
+    }
+    if(mode==='adm'){buildAdmTables(c);admRc()}
+  }
+  if(!s.uploaded)s.uploaded=[];
+  s.uploaded.push({month:mi??now.getMonth(),year:ex.year||now.getFullYear(),type:ex.bill_type,time:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})});
+  saveState();
+  if(mode==='mgr'){renderMgrHist();renderMgrSum()}
+}
+
+function toB64(f){return new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.onerror=()=>j(new Error('שגיאת קריאה'));fr.readAsDataURL(f)})}
+
+// ══════════════════════════════════════════════
+// MISC
+// ══════════════════════════════════════════════
+function showApiModal(){
+  const existing=localStorage.getItem('pp_apikey')||'';
+  document.getElementById('api-key-input').value=existing;
+  document.getElementById('api-status').textContent=existing?'✅ API Key קיים — ניתן לעדכן':'אין API Key — הכנס כדי לאפשר חילוץ אוטומטי';
+  document.getElementById('modal-api').classList.add('on');
+  setTimeout(()=>document.getElementById('api-key-input').focus(),150);
+}
+function closeApiModal(){document.getElementById('modal-api').classList.remove('on')}
+function saveApiKey(){
+  const key=document.getElementById('api-key-input').value.trim();
+  if(!key){toast('⚠️','הכנס API Key תקין');return}
+  if(!key.startsWith('sk-ant-')){toast('⚠️','API Key חייב להתחיל ב-sk-ant-');return}
+  localStorage.setItem('pp_apikey',key);
+  closeApiModal();
+  toast('✅','API Key נשמר בהצלחה');
+}
+// ══════════════════════════════════════════════
+// ANALYTICS
+// ══════════════════════════════════════════════
+let AN_PERIOD='ytd';
+const CAT_NAMES={commercial:'🏪 מסחרי',logistics:'🏭 לוגיסטי',offices:'🏢 משרדים',parking:'🅿️ חניונים'};
+
+function showAnalytics(){
+  document.getElementById('nav-sub').textContent='ניתוח רווחים';
+  // Populate year selector
+  const now=new Date(); const yr=document.getElementById('an-year-sel');
+  yr.innerHTML='';
+  for(let y=now.getFullYear();y>=now.getFullYear()-3;y--){
+    const o=document.createElement('option');o.value=y;o.textContent=y;yr.appendChild(o);
+  }
+  document.getElementById('an-date').textContent=new Date().toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  setAnPeriod('ytd');
+  showScr('analytics');
+}
+
+function setAnPeriod(p){
+  AN_PERIOD=p;
+  ['ytd','month','year'].forEach(x=>{
+    const b=document.getElementById('an-btn-'+x);
+    if(b)b.classList.toggle('active',x===p);
+  });
+  renderAnalytics();
+}
+
+function getAnMonths(){
+  const now=new Date(),cm=now.getMonth(),cy=now.getFullYear();
+  if(AN_PERIOD==='month') return [{m:cm,y:cy}];
+  if(AN_PERIOD==='ytd') return Array.from({length:cm+1},(_,i)=>({m:i,y:cy}));
+  const yr=parseInt(document.getElementById('an-year-sel').value)||cy;
+  return Array.from({length:12},(_,i)=>({m:i,y:yr}));
+}
+
+function calcSitePeriod(site){
+  // Calc based on entered data (v array = monthly data)
+  let tV=0,tM=0,tS=0,tEV=0;
+  const months=getAnMonths();
+  site.conns.forEach(c=>{
+    const r=calcConn(c);
+    // Sum only relevant months
+    months.forEach(({m})=>{
+      tV+=r.monthly[m]?.save||0;
+      tM+=r.monthly[m]?.mnP||0;
+      tS+=r.monthly[m]?.solN||0;
+      tEV+=r.monthly[m]?.evN||0;
+    });
+  });
+  return{tV,tM,tS,tEV};
+}
+
+function renderAnalytics(){
+  const MONTHS_HE=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  // By site
+  const siteTb=document.getElementById('an-site-body');
+  siteTb.innerHTML='';
+  let tsv=0,tsm=0,tss=0,tsev=0,tst=0;
+  SITES.forEach(s=>{
+    const c=calcSitePeriod(s);
+    const tot=c.tV+c.tM+c.tS+c.tEV;
+    tsv+=c.tV;tsm+=c.tM;tss+=c.tS;tsev+=c.tEV;tst+=tot;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="mn">${s.av} ${s.name}</td><td>${CAT_NAMES[s.cat]||s.cat}</td><td>${s.conns[0].icp}</td>
+      <td class="${c.tV>=0?'pos':'neg'}">${f(c.tV)}</td><td class="${c.tM>=0?'pos':'neg'}">${f(c.tM)}</td>
+      <td class="${c.tS>=0?'pos':'neg'}">${f(c.tS)}</td><td class="${c.tEV>=0?'pos':'neg'}">${f(c.tEV)}</td>
+      <td class="${tot>=0?'pos':'neg'}" style="font-weight:700">${f(tot)}</td>`;
+    siteTb.appendChild(tr);
+  });
+  se('an-sv',f(tsv));se('an-sm',f(tsm));se('an-ss',f(tss));se('an-sev',f(tsev));se('an-st',f(tst));
+
+  // By category
+  const catTb=document.getElementById('an-cat-body');
+  catTb.innerHTML='';
+  const cats={};
+  SITES.forEach(s=>{
+    if(!cats[s.cat])cats[s.cat]={n:0,tV:0,tM:0,tS:0,tEV:0};
+    const c=calcSitePeriod(s);
+    cats[s.cat].n++;cats[s.cat].tV+=c.tV;cats[s.cat].tM+=c.tM;cats[s.cat].tS+=c.tS;cats[s.cat].tEV+=c.tEV;
+  });
+  Object.entries(cats).forEach(([cat,c])=>{
+    const tot=c.tV+c.tM+c.tS+c.tEV;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="mn">${CAT_NAMES[cat]||cat}</td><td>${c.n}</td>
+      <td class="pos">${f(c.tV)}</td><td class="pos">${f(c.tM)}</td><td class="pos">${f(c.tS)}</td><td class="pos">${f(c.tEV)}</td>
+      <td class="${tot>=0?'pos':'neg'}" style="font-weight:700">${f(tot)}</td>`;
+    catTb.appendChild(tr);
+  });
+
+  // By supplier
+  const supTb=document.getElementById('an-sup-body');
+  supTb.innerHTML='';
+  const sups={};
+  SITES.forEach(s=>{
+    const icp=s.conns[0].icp;
+    if(!sups[icp])sups[icp]={n:0,tV:0,tM:0};
+    const c=calcSitePeriod(s);
+    sups[icp].n++;sups[icp].tV+=c.tV;sups[icp].tM+=c.tM;
+  });
+  Object.entries(sups).forEach(([icp,c])=>{
+    const tot=c.tV+c.tM;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="mn">⚡ ${icp}</td><td>${c.n}</td>
+      <td class="pos">${f(c.tV)}</td><td class="pos">${f(c.tM)}</td>
+      <td class="${tot>=0?'pos':'neg'}" style="font-weight:700">${f(tot)}</td>`;
+    supTb.appendChild(tr);
+  });
+
+  // By discipline
+  const discTb=document.getElementById('an-disc-body');
+  const discKpi=document.getElementById('an-disc-kpi');
+  if(discTb){
+    discTb.innerHTML='';
+    let tdv=0,tdm=0,tds=0,tdev=0;
+    SITES.forEach(s=>{
+      const c=calcSitePeriod(s);
+      const tot=Math.abs(c.tV)+Math.abs(c.tM)+Math.abs(c.tS)+Math.abs(c.tEV)||1;
+      tdv+=c.tV;tdm+=c.tM;tds+=c.tS;tdev+=c.tEV;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="mn">${s.av} ${s.name}</td>
+        <td class="${c.tV>=0?'pos':'neg'}">${f(c.tV)}</td>
+        <td class="${c.tM>=0?'pos':'neg'}">${f(c.tM)}</td>
+        <td class="${c.tS>=0?'pos':'neg'}">${f(c.tS)}</td>
+        <td class="${c.tEV>=0?'pos':'neg'}">${f(c.tEV)}</td>
+        <td style="color:var(--green)">${Math.round(Math.abs(c.tV)/tot*100)}%</td>
+        <td style="color:var(--orange)">${Math.round(Math.abs(c.tM)/tot*100)}%</td>
+        <td style="color:var(--gold)">${Math.round(Math.abs(c.tS)/tot*100)}%</td>
+        <td style="color:var(--purple)">${Math.round(Math.abs(c.tEV)/tot*100)}%</td>`;
+      discTb.appendChild(tr);
+    });
+    const grand=Math.abs(tdv)+Math.abs(tdm)+Math.abs(tds)+Math.abs(tdev)||1;
+    se('an-dv',f(tdv));se('an-dm',f(tdm));se('an-ds',f(tds));se('an-dev',f(tdev));
+    se('an-dtot',f(tdv+tdm+tds+tdev));
+    if(discKpi) discKpi.innerHTML=`
+      <div class="sc2" style="border:1px solid rgba(0,230,118,0.2)"><div class="sl">⚡ יח"פ</div><div class="sv" style="color:var(--green)">${f(tdv)}</div><div class="ss2">${Math.round(Math.abs(tdv)/grand*100)}% מהסה"כ</div></div>
+      <div class="sc2" style="border:1px solid rgba(255,152,0,0.2)"><div class="sl">🔌 מ"נ</div><div class="sv" style="color:var(--orange)">${f(tdm)}</div><div class="ss2">${Math.round(Math.abs(tdm)/grand*100)}% מהסה"כ</div></div>
+      <div class="sc2" style="border:1px solid rgba(255,213,79,0.2)"><div class="sl">☀️ סולארי</div><div class="sv" style="color:var(--gold)">${f(tds)}</div><div class="ss2">${Math.round(Math.abs(tds)/grand*100)}% מהסה"כ</div></div>
+      <div class="sc2" style="border:1px solid rgba(179,136,255,0.2)"><div class="sl">🔋 EV</div><div class="sv" style="color:var(--purple)">${f(tdev)}</div><div class="ss2">${Math.round(Math.abs(tdev)/grand*100)}% מהסה"כ</div></div>`;
+  }
+}
+
+function togAn(id){
+  const b=document.getElementById('sb-an-'+id),c=document.getElementById('ch-an-'+id);
+  if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// EXCEL EXPORT
+// ══════════════════════════════════════════════
+function exportExcel(){
+  const now=new Date();
+  let csv='\ufeff'; // BOM for Hebrew
+
+  // Header
+  csv+='דוח רווחי חשמל — PowerProfit\n';
+  csv+=`תאריך הפקה: ${now.toLocaleDateString('he-IL')}\n\n`;
+
+  // By site
+  csv+='רווחים לפי נכס\n';
+  csv+='נכס,קטגוריה,ספק יח"פ,חברת מניה,יח"פ (₪),מ"נ (₪),סולארי (₪),EV (₪),סה"כ (₪)\n';
+  let tsv=0,tsm=0,tss=0,tsev=0;
+  SITES.forEach(s=>{
+    const c=calcSite(s);
+    tsv+=c.tV;tsm+=c.tM;tss+=c.tS;tsev+=c.tEV;
+    csv+=`${s.name},${CAT_NAMES[s.cat]||s.cat},${s.conns[0].icp},${s.conns[0].co},${Math.round(c.tV)},${Math.round(c.tM)},${Math.round(c.tS)},${Math.round(c.tEV)},${Math.round(c.tV+c.tM+c.tS+c.tEV)}\n`;
+  });
+  csv+=`סה"כ,,,,${Math.round(tsv)},${Math.round(tsm)},${Math.round(tss)},${Math.round(tsev)},${Math.round(tsv+tsm+tss+tsev)}\n\n`;
+
+  // By category
+  csv+='רווחים לפי קטגוריה\n';
+  csv+='קטגוריה,מספר נכסים,יח"פ (₪),מ"נ (₪),סולארי (₪),EV (₪),סה"כ (₪)\n';
+  const cats={};
+  SITES.forEach(s=>{
+    if(!cats[s.cat])cats[s.cat]={n:0,tV:0,tM:0,tS:0,tEV:0};
+    const c=calcSite(s);
+    cats[s.cat].n++;cats[s.cat].tV+=c.tV;cats[s.cat].tM+=c.tM;cats[s.cat].tS+=c.tS;cats[s.cat].tEV+=c.tEV;
+  });
+  Object.entries(cats).forEach(([cat,c])=>{
+    csv+=`${CAT_NAMES[cat]||cat},${c.n},${Math.round(c.tV)},${Math.round(c.tM)},${Math.round(c.tS)},${Math.round(c.tEV)},${Math.round(c.tV+c.tM+c.tS+c.tEV)}\n`;
+  });
+  csv+='\n';
+
+  // By supplier
+  csv+='רווחים לפי ספק יח"פ\n';
+  csv+='ספק,מספר נכסים,חיסכון יח"פ (₪),רווח מ"נ (₪),סה"כ (₪)\n';
+  const sups={};
+  SITES.forEach(s=>{
+    const icp=s.conns[0].icp;
+    if(!sups[icp])sups[icp]={n:0,tV:0,tM:0};
+    const c=calcSite(s);
+    sups[icp].n++;sups[icp].tV+=c.tV;sups[icp].tM+=c.tM;
+  });
+  Object.entries(sups).forEach(([icp,c])=>{
+    csv+=`${icp},${c.n},${Math.round(c.tV)},${Math.round(c.tM)},${Math.round(c.tV+c.tM)}\n`;
+  });
+  csv+='\n';
+
+  // Monthly detail
+  csv+='פירוט חודשי לכל נכס\n';
+  csv+='נכס,'+MONTHS.join(',')+',סה"כ\n';
+  SITES.forEach(s=>{
+    const monthlyTots=MONTHS.map((_,i)=>{
+      let t=0;
+      s.conns.forEach(c=>{const r=calcConn(c);t+=r.monthly[i].save+r.monthly[i].mnP+r.monthly[i].solN+r.monthly[i].evN});
+      return Math.round(t);
+    });
+    const total=monthlyTots.reduce((a,b)=>a+b,0);
+    csv+=`${s.name},${monthlyTots.join(',')},${total}\n`;
+  });
+
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`רווחי_חשמל_${now.getFullYear()}_${String(now.getMonth()+1).padStart(2,'0')}.csv`;
+  a.click();
+  toast('📥','קובץ Excel יוצא בהצלחה');
+}
+function tog(id){const b=document.getElementById('pb-'+id),c=document.getElementById('ch-'+id);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open')}
+function resetUZ(uzId,ucId){const uz=document.getElementById(uzId);uz.className='uz';document.getElementById(ucId).innerHTML=`<div style="font-size:28px;margin-bottom:8px">📄</div><h3>גרור חשבון לכאן</h3><p>AI מזהה את סוג החשבון ומחלץ אוטומטית</p>`}
+function exportCSV(){let csv='נכס,יח"פ,מ"נ,סולארי,EV,סה"כ\n';SITES.forEach(s=>{const c=calcSite(s);csv+=`${s.name},${Math.round(c.tV)},${Math.round(c.tM)},${Math.round(c.tS)},${Math.round(c.tEV)},${Math.round(c.tV+c.tM+c.tS+c.tEV)}\n`});const b=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='רווחי_חשמל.csv';a.click();toast('📥','ייצוא הושלם')}
+function se(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+function seCls(id,v,cls){const e=document.getElementById(id);if(e){e.textContent=v;e.className=cls}}
+function f(n){return '₪'+Math.round(n).toLocaleString('he-IL')}
+function fK(n){const a=Math.abs(n);if(a>=1e6)return(n<0?'-':'')+'₪'+(n/1e6).toFixed(1)+'M';if(a>=1000)return(n<0?'-':'')+'₪'+(n/1000).toFixed(0)+'K';return f(n)}
+function toast(icon,msg){const t=document.getElementById('toast');document.getElementById('ti').textContent=icon;document.getElementById('tm').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// INIT
+document.getElementById('home-date')&&(document.getElementById('home-date').textContent='עדכון: '+new Date().toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'}));
+if(sessionStorage.getItem('admin_ok')==='1'){showAdminHome()}else{showScr('home');initHome()}
+</script>
+<!-- Reset Modal -->
+<div class="overlay" id="modal-reset" onclick="if(event.target===this)closeResetModal()">
+  <div class="modal" style="max-width:420px;text-align:right">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:900">🗑️ איפוס נתונים</h2>
+      <button onclick="closeResetModal()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px">✕</button>
+    </div>
+    <p id="reset-site-name" style="font-size:14px;font-weight:700;color:var(--acc);margin-bottom:16px"></p>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px">בחר מה לאפס:</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+      <button class="btn btn-ghost btn-full" onclick="doReset('all')" style="justify-content:right;color:var(--red);border-color:rgba(255,82,82,0.3)">🗑️ איפוס כל הנתונים</button>
+      <div style="border-top:1px solid var(--b);padding-top:12px;margin-top:4px">
+        <p style="font-size:11px;color:var(--text3);margin-bottom:10px">או אפס חודש ספציפי:</p>
+        <div id="reset-months-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-full" onclick="closeResetModal()">ביטול</button>
+  </div>
+</div>
+<div class="overlay" id="modal-newsite" onclick="if(event.target===this)closeNewSite()">
+  <div class="modal" style="max-width:480px;text-align:right">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:900">➕ הוספת נכס חדש</h2>
+      <button onclick="closeNewSite()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="fg" style="grid-column:1/-1"><label>שם הנכס *</label><input id="ns-name" placeholder="למשל: קניון הדר חיפה"></div>
+      <div class="fg" style="grid-column:1/-1"><label>תיאור קצר</label><input id="ns-sub" placeholder="למשל: מרכז מסחרי — אנלייט / QLC"></div>
+      <div class="fg"><label>קטגוריה *</label>
+        <select id="ns-cat"><option value="commercial">🏪 מסחרי</option><option value="logistics">🏭 לוגיסטי</option><option value="offices">🏢 משרדים</option><option value="parking">🅿️ חניונים</option></select>
+      </div>
+      <div class="fg"><label>PIN גישה (4 ספרות) *</label><input id="ns-pin" placeholder="1234" maxlength="4" type="password"></div>
+      <div class="fg"><label>ספק יח"פ *</label>
+        <select id="ns-icp"><option value="אנלייט">אנלייט</option><option value="דליה">דליה</option><option value="דוראד">דוראד</option><option value="OPC">OPC</option></select>
+      </div>
+      <div class="fg"><label>חברת מניה *</label>
+        <select id="ns-co"><option value="QLC">QLC</option><option value="גלרון">גלרון</option><option value="סייטק">סייטק</option></select>
+      </div>
+      <div class="fg"><label>מתח חיבור *</label>
+        <select id="ns-volt"><option value="high">מתח גבוה</option><option value="low">מתח נמוך</option></select>
+      </div>
+      <div class="fg"><label>גודל חיבור KVA *</label><input id="ns-kva" type="number" placeholder="1000"></div>
+      <div class="fg"><label>הנחת יח"פ % *</label><input id="ns-disc" type="number" placeholder="11.5" step="0.01"></div>
+      <div class="fg"><label>אסדרה סולארית</label>
+        <select id="ns-solar"><option value="none">ללא</option><option value="tariff">תעריפית</option><option value="net">מונה נטו</option></select>
+      </div>
+      <div class="fg"><label>עלות תפעול סולארי ₪</label><input id="ns-opex" type="number" placeholder="0"></div>
+      <div class="fg"><label>אייקון</label>
+        <select id="ns-av"><option value="🏬">🏬 קניון</option><option value="🏢">🏢 בניין</option><option value="🏛">🏛 מרכז</option><option value="🏪">🏪 חנות</option><option value="🏗">🏗 נכס</option><option value="🏘">🏘 שכונה</option><option value="🏠">🏠 בית</option></select>
+      </div>
+    </div>
+    <div id="ns-err" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeNewSite()">ביטול</button>
+      <button class="btn btn-acc" style="flex:1;justify-content:center" onclick="addNewSite()">➕ הוסף נכס</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openNewSite(){
+  // Reset form
+  ['ns-name','ns-sub','ns-pin','ns-kva','ns-disc','ns-opex'].forEach(id=>{
+    const el=document.getElementById(id); if(el)el.value='';
+  });
+  document.getElementById('ns-err').style.display='none';
+  document.getElementById('modal-newsite').classList.add('on');
+  setTimeout(()=>document.getElementById('ns-name').focus(),150);
+}
+function closeNewSite(){document.getElementById('modal-newsite').classList.remove('on')}
+
+function addNewSite(){
+  const name=document.getElementById('ns-name').value.trim();
+  const pin=document.getElementById('ns-pin').value.trim();
+  const kva=parseFloat(document.getElementById('ns-kva').value)||0;
+  const disc=parseFloat(document.getElementById('ns-disc').value)||0;
+  const err=document.getElementById('ns-err');
+
+  if(!name){err.textContent='חובה להכניס שם נכס';err.style.display='block';return}
+  if(!pin||pin.length!==4||!/^\d{4}$/.test(pin)){err.textContent='PIN חייב להיות 4 ספרות';err.style.display='block';return}
+  if(!kva){err.textContent='חובה להכניס גודל חיבור KVA';err.style.display='block';return}
+  if(!disc){err.textContent='חובה להכניס אחוז הנחה';err.style.display='block';return}
+
+  const id=name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\u0590-\u05ff-]/g,'')+ '-' +Date.now().toString().slice(-4);
+  const cat=document.getElementById('ns-cat').value;
+  const icp=document.getElementById('ns-icp').value;
+  const co=document.getElementById('ns-co').value;
+  const volt=document.getElementById('ns-volt').value;
+  const solar=document.getElementById('ns-solar').value;
+  const opex=parseFloat(document.getElementById('ns-opex').value)||0;
+  const av=document.getElementById('ns-av').value;
+  const sub=document.getElementById('ns-sub').value.trim()||`${icp} / ${co}`;
+  const COLS=['rgba(0,200,255,0.15)','rgba(0,230,118,0.12)','rgba(255,213,79,0.12)','rgba(255,152,0,0.12)','rgba(179,136,255,0.12)','rgba(255,82,82,0.12)'];
+  const col=COLS[SITES.length%COLS.length];
+
+  const newSite={id,name,sub,av,col,cat,connNames:null,uploaded:[],
+    conns:[mkC({kva,volt,co,icp,disc,solar,opex,fmg:volt==='high'?602:253.16,fmn:253.16})]
+  };
+
+  SITES.push(newSite);
+  SITE_PINS[id]=pin;
+  saveState();
+  closeNewSite();
+  showAdminHome();
+  toast('✅',`נכס "${name}" נוסף בהצלחה! PIN: ${pin}`);
+}
+</script>
+</body>
+</html>
