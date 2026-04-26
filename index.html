@@ -1754,7 +1754,7 @@ async function procFile(file,mode,hint){
 "ev_ac_profit":רווח_AC_ללא_מעמ,"ev_dc_profit":רווח_DC_ללא_מעמ}
 null לשדות חסרים.`});
 
-    const apiKey = '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';
+    const apiKey = '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';
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:mc}]})});
     const data=await resp.json();
     if(!data.content) throw new Error('שגיאת API: '+(data.error?.message||JSON.stringify(data)));
