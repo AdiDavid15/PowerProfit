@@ -1595,14 +1595,21 @@ async function procFile(file,mode,hint){
             if(colIdx!==null) break;
           }
           if(colIdx!==null){
+            let fallbackVal=null;
             for(let ri=0;ri<rows.length;ri++){
               const row=rows[ri]; if(!row) continue;
               const cell1=row[1];
               if(cell1&&typeof cell1==='string'&&(cell1.includes('סה"כ')||cell1.includes('סה\'\'כ'))){
                 const val=row[colIdx];
-                if(typeof val==='number'&&val>0){tenantBill=Math.round(val);break;}
+                if(typeof val==='number'&&val>0){
+                  // עדיפות לשורת "סה"כ אתר" — היא הסיכום הכולל
+                  if(cell1.includes('אתר')){tenantBill=Math.round(val);break;}
+                  // שמור את הראשון כפולבק
+                  if(!fallbackVal) fallbackVal=Math.round(val);
+                }
               }
             }
+            if(!tenantBill&&fallbackVal) tenantBill=fallbackVal;
           }
 
           // פורמט 2 (QLC/סוהו): שורת "סה"כ דיירים" — קח את האחרונה (הכוללת)
@@ -1634,15 +1641,26 @@ async function procFile(file,mode,hint){
               const row=rows[ri]; if(!row) continue;
               const rowStr=row.map(c=>c!=null?String(c):'').join(' ');
               if(rowStr.includes('סה"כ')&&rowStr.includes('אתר')&&!rowStr.includes('צריכה')&&!rowStr.includes('הפרש')&&!rowStr.includes('חשמל')){
-                // מצא עמודת כותרת "סה"כ תשלום ללא מע"מ" או קח עמודה עם ערך מתאים
                 let totalCol=null;
-                for(let hri=Math.max(0,ri-30);hri<ri;hri++){
+                // מנסה קודם עמודה עם "תשלום"+"מע"מ"+"חיובים/קבועים" (גן יבנה / ריכוז מיוחד)
+                for(let hri=0;hri<ri;hri++){
                   const hrow=rows[hri]; if(!hrow) continue;
                   for(let ci=0;ci<hrow.length;ci++){
                     const c=hrow[ci];
-                    if(c&&typeof c==='string'&&c.includes('תשלום')&&c.includes('מע"מ')&&!c.includes('חיובים')&&!c.includes('קבועים')){totalCol=ci;break;}
+                    if(c&&typeof c==='string'&&c.includes('תשלום')&&c.includes('\u05de\u05e2')&&(c.includes('חיובים')||c.includes('קבועים'))){totalCol=ci;break;}
                   }
                   if(totalCol!==null) break;
+                }
+                // אם לא מצא — מנסה עמודה עם "תשלום"+"מע"מ" בלבד (פורמט ישן)
+                if(totalCol===null){
+                  for(let hri=Math.max(0,ri-30);hri<ri;hri++){
+                    const hrow=rows[hri]; if(!hrow) continue;
+                    for(let ci=0;ci<hrow.length;ci++){
+                      const c=hrow[ci];
+                      if(c&&typeof c==='string'&&c.includes('תשלום')&&c.includes('מע"מ')&&!c.includes('חיובים')&&!c.includes('קבועים')){totalCol=ci;break;}
+                    }
+                    if(totalCol!==null) break;
+                  }
                 }
                 const val=totalCol!==null?row[totalCol]:null;
                 if(typeof val==='number'&&val>0){tenantBill=Math.round(val);break;}
@@ -1758,7 +1776,9 @@ null לשדות חסרים.`});
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:mc}]})});
     const data=await resp.json();
     if(!data.content) throw new Error('שגיאת API: '+(data.error?.message||JSON.stringify(data)));
-    const txt=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const jsonMatch=raw.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
+    const txt=jsonMatch?jsonMatch[1].trim():raw.replace(/```json|```/g,'').trim();
     if(!txt) throw new Error('AI לא החזיר תשובה');
     const parsed=JSON.parse(txt);
     // תמיכה במערך (מספר חודשים) או אובייקט בודד
